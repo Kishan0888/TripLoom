@@ -10,7 +10,7 @@ export default function AdminLayout() {
   const nav = useNavigate();
   const [open, setOpen] = useState(false);
   if (loading) return <Loading />;
-  if (!isAdmin) return <Navigate to="/" replace />;
+  if (!isAdmin) return <Navigate to="/app" replace />;
   const cls = ({ isActive }) => (isActive ? 'on' : '');
   return (
     <div className="app">

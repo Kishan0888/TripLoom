@@ -12,7 +12,7 @@ export default function Login() {
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState(null);
 
-  useEffect(() => { if (!loading && user) nav('/', { replace: true }); }, [user, loading, nav]);
+  useEffect(() => { if (!loading && user) nav('/app', { replace: true }); }, [user, loading, nav]);
 
   async function submit(e) {
     e.preventDefault();

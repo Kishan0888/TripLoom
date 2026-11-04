@@ -20,6 +20,13 @@ import Settings from './pages/app/Settings';
 import Pay from './pages/public/Pay';
 import PayInvoice from './pages/public/PayInvoice';
 import InvoicePrint from './pages/app/InvoicePrint';
+import SiteLayout from './site/SiteLayout';
+import SiteHome from './site/pages/Home';
+import SiteProduct from './site/pages/Product';
+import SitePayments from './site/pages/Payments';
+import SitePricing from './site/pages/Pricing';
+import SiteContact from './site/pages/Contact';
+import { Privacy, Terms, Refunds } from './site/pages/Legal';
 
 function Home() {
   const { loading, user, isAdmin, memberships } = useSession();
@@ -40,7 +47,19 @@ function RequireAuth({ children }) {
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      {/* Marketing website */}
+      <Route element={<SiteLayout />}>
+        <Route path="/" element={<SiteHome />} />
+        <Route path="/product" element={<SiteProduct />} />
+        <Route path="/payments" element={<SitePayments />} />
+        <Route path="/pricing" element={<SitePricing />} />
+        <Route path="/contact" element={<SiteContact />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/refunds" element={<Refunds />} />
+      </Route>
+      {/* Software */}
+      <Route path="/app" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/p/:token" element={<Pay />} />
       <Route path="/p/:token/invoice" element={<PayInvoice />} />

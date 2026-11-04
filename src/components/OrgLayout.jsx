@@ -48,7 +48,7 @@ export default function OrgLayout() {
         <div className="cocard"><div className="cobody" style={{ textAlign: 'center' }}>
           <h2>No access to this workspace</h2>
           <p className="sub">{err || 'Ask the organisation owner to add you.'}</p>
-          <Link className="btn" to="/">Go to my workspaces</Link>
+          <Link className="btn" to="/app">Go to my workspaces</Link>
         </div></div>
       </div>
     );
@@ -77,7 +77,7 @@ export default function OrgLayout() {
       <div className={`app ${open ? 'nav-open' : ''}`}>
         <aside className="side" style={open ? { transform: 'none', boxShadow: 'var(--shadow)' } : undefined}>
           <div className="brandmark"><LogoMark /><div><b>TripLoom</b><small>Payments</small></div></div>
-          <button className="opbox orgswitch" onClick={() => nav('/')} title="Switch workspace">
+          <button className="opbox orgswitch" onClick={() => nav('/app')} title="Switch workspace">
             {org.logo_url && <img src={org.logo_url} alt="" style={{ maxHeight: 34, maxWidth: '100%', objectFit: 'contain', display: 'block', marginBottom: 6 }} />}
             <b>{org.name}</b><span>{ROLE_LBL[role]} · switch workspace</span>
           </button>
