@@ -5,7 +5,7 @@ import { useLoad } from '../../lib/session';
 import { Loading, ErrorBox, Modal, Field, Icon, Pill, Empty, useToast, copyText } from '../../components/ui';
 import { inr0, fd, initials } from '../../lib/format';
 
-const slugify = (s) => s.toLowerCase().replace(/pvt|ltd|private|limited/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
+const slugify = (s) => s.toLowerCase().replace(/\b(pvt|ltd|private|limited)\b\.?/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
 
 export default function AdminOrgs() {
   const nav = useNavigate();
@@ -61,7 +61,8 @@ function OnboardModal({ onClose, onDone }) {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState(null);
   const set = (k) => (e) => {
-    const v = e.target.value;
+    // Workspace address is cleaned as you type: lowercase, spaces become hyphens, other characters dropped.
+    const v = k === 'slug' ? e.target.value.toLowerCase().replace(/[\s_]+/g, '-').replace(/[^a-z0-9-]/g, '').slice(0, 40) : e.target.value;
     setF((p) => {
       const n = { ...p, [k]: v };
       if (k === 'name' && !slugTouched) n.slug = slugify(v);
@@ -73,7 +74,7 @@ function OnboardModal({ onClose, onDone }) {
   async function save() {
     const e = [];
     if (!f.name.trim()) e.push('Enter the company name.');
-    if (!/^[a-z0-9-]{2,40}$/.test(f.slug)) e.push('Workspace address can use lowercase letters, numbers and hyphens (2–40).');
+    if (!/^[a-z0-9-]{2,40}$/.test(f.slug)) e.push('Workspace address needs at least 2 characters, e.g. banyan-tours.');
     if (!f.owner_name.trim()) e.push('Enter the owner’s name.');
     if (!/^\S+@\S+\.\S+$/.test(f.owner_email)) e.push('Enter a valid owner email.');
     if (e.length) { setErr(e.join(' ')); return; }
@@ -89,7 +90,7 @@ function OnboardModal({ onClose, onDone }) {
       footer={<><button className="btn ghost" onClick={onClose}>Cancel</button><button className="btn primary" onClick={save} disabled={busy}>{busy ? 'Creating…' : 'Create workspace'}</button></>}>
       <div className="fgrid">
         <Field label="Company name" id="o-name" span><input className="in" id="o-name" value={f.name} onChange={set('name')} placeholder="e.g. Banyan Tours Pvt Ltd" /></Field>
-        <Field label="Workspace address" id="o-slug" hint={`payments.triploom.in/o/${f.slug || 'your-company'}`}><input className="in mono" id="o-slug" value={f.slug} onChange={set('slug')} /></Field>
+        <Field label="Workspace address" id="o-slug" hint={`Short name for their link, e.g. banyan-tours → payments.triploom.in/o/${f.slug || 'banyan-tours'}`}><input className="in mono" id="o-slug" value={f.slug} onChange={set('slug')} /></Field>
         <Field label="Invoice prefix" id="o-pre" hint="Invoices are numbered PREFIX/26-27/0001"><input className="in mono" id="o-pre" value={f.invoice_prefix} onChange={set('invoice_prefix')} placeholder="BT" maxLength={6} /></Field>
         <Field label="Billing email" id="o-email"><input className="in" id="o-email" value={f.email} onChange={set('email')} /></Field>
         <Field label="Phone" id="o-phone"><input className="in" id="o-phone" value={f.phone} onChange={set('phone')} /></Field>
