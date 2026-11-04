@@ -91,7 +91,7 @@ export default function Pay() {
             {result && <><dt>Reference</dt><dd className="mono">{result.order_id}</dd></>}
             <dt>Invoice</dt><dd>{i.number}</dd><dt>Balance left</dt><dd>{money(Math.max(0, i.due), i.currency)}</dd>
           </dl>
-          <button className="btn" onClick={() => { setResult(null); setSp({}); }}>Done</button>
+          <div style={{ display: 'flex', gap: 8 }}><a className="btn" href={`/p/${token}/invoice?print=1`} target="_blank" rel="noreferrer">Download invoice (PDF)</a><button className="btn primary" onClick={() => { setResult(null); setSp({}); }}>Done</button></div>
         </div>
       ) : back === 'pending' ? (
         <div className="cobody" style={{ textAlign: 'center' }}>
@@ -100,7 +100,8 @@ export default function Pay() {
           <button className="btn" style={{ alignSelf: 'center' }} onClick={() => { setSp({}); reload(); }}>Back to invoice</button>
         </div>
       ) : Number(i.due) <= 0.005 ? (
-        <div className="cobody" style={{ textAlign: 'center' }}><h2 style={{ fontSize: 22 }}>This invoice is paid in full</h2><p className="sub">Thank you. Nothing more is due on {i.number}.</p></div>
+        <div className="cobody" style={{ textAlign: 'center' }}><h2 style={{ fontSize: 22 }}>This invoice is paid in full</h2><p className="sub">Thank you. Nothing more is due on {i.number}.</p>
+          <a className="btn" style={{ alignSelf: 'center' }} href={`/p/${token}/invoice?print=1`} target="_blank" rel="noreferrer">Download invoice (PDF)</a></div>
       ) : (
         <div className="cobody">
           {(back === 'failed' || back === 'cancelled') && <div className="alert bad">{back === 'cancelled' ? 'The payment was cancelled. You have not been charged.' : 'The payment didn’t go through. Please try again or choose another option.'}</div>}
@@ -120,6 +121,7 @@ export default function Pay() {
             <div className="tw" style={{ marginTop: 10 }}><table className="t"><tbody>{lines.map((l, k) => <tr key={k}><td>{l.description}</td><td className="right num">{Number(l.qty)} × {money(l.rate, i.currency)}</td></tr>)}</tbody>
               <tfoot><tr><td>Total{Number(i.tax) > 0 ? ` incl. ${Number(i.tax_pct)}% tax` : ''}</td><td className="right num">{money(i.total, i.currency)}</td></tr></tfoot></table></div></details>
           {i.notes && <p className="sub" style={{ fontSize: 13 }}>{i.notes}</p>}
+          <a className="link" style={{ alignSelf: 'flex-start' }} href={`/p/${token}/invoice?print=1`} target="_blank" rel="noreferrer">Download invoice (PDF)</a>
 
           {!isDemo && gateways.length > 1 && (
             <div><span className="eyebrow">Pay with</span>

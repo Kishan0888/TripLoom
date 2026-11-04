@@ -66,6 +66,7 @@ export default function InvoiceDetail() {
           <div className="dhead"><h1 style={{ fontSize: 24 }}>{i.number}</h1><StatusPill s={i.display_status} /></div>
           <p className="sub">{i.customer_name} · {i.trip}</p></div>
         <div className="actions">
+          <Link className="btn" to={`${base}/invoices/${i.id}/print?print=1`} target="_blank"><Icon name="inv" />Download PDF</Link>
           {i.status === 'draft' && <><button className="btn danger" onClick={() => setConfirm('delete')}>Delete draft</button><button className="btn primary" onClick={() => act2('send')}>Send invoice</button></>}
           {i.status === 'sent' && <>
             {i.display_status !== 'paid' && <><button className="btn" onClick={() => remind(org.id, i.id, i.customer_name, toast).then(reload)}><Icon name="bell" />Send reminder</button>

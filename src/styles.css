@@ -30,7 +30,7 @@
 
 *{box-sizing:border-box}
 html,body{height:100%}
-body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
 h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;letter-spacing:-.01em}
 h1{font-size:26px;font-weight:700}
 h2{font-size:16px;font-weight:600}
@@ -316,3 +316,59 @@ textarea.in{height:auto;padding:9px 11px;resize:vertical;min-height:72px}
 .orgcard .top{display:flex;gap:12px;align-items:center}
 .orgcard .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:12px;color:var(--ink-3)}
 .orgcard .stats b{display:block;font-size:15px;color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* ---- A4 invoice (screen preview + print) ---- */
+.print-page{min-height:100%;background:var(--surface-2);padding-block:0 32px}
+.print-bar{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--surface);border-bottom:1px solid var(--line);padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));margin-bottom:24px}
+.print-scroll{overflow-x:auto;padding:0 16px}
+.a4{position:relative;width:210mm;min-height:297mm;margin:0 auto;padding:14mm 15mm 12mm;background:#fff;color:#1a1d29;box-shadow:0 2px 6px rgba(0,0,0,.08),0 12px 40px rgba(0,0,0,.12);
+  font-family:var(--f-body);font-size:9.3pt;line-height:1.4;display:flex;flex-direction:column;gap:4mm;-webkit-print-color-adjust:exact;print-color-adjust:exact;overflow:hidden}
+.a4 *{border-color:#d9dce5}
+.a4-head{display:flex;justify-content:space-between;gap:10mm;align-items:flex-start;padding-bottom:4mm;border-bottom:1.5pt solid #1b275c}
+.a4-brand{display:flex;flex-direction:column;gap:3mm;max-width:105mm}
+.a4-logo{max-height:16mm;max-width:80mm;object-fit:contain;object-position:left;display:block}
+.a4-orgname{font-family:var(--f-display);font-size:17pt;font-weight:700;color:#1b275c;letter-spacing:-.01em}
+.a4-small{font-size:8.5pt;color:#4a5068;display:flex;flex-direction:column;gap:.6mm}
+.a4-strong{font-weight:600;color:#1a1d29}
+.a4-title{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:3mm}
+.a4-h1{font-family:var(--f-display);font-size:24pt;font-weight:700;letter-spacing:.02em;text-transform:uppercase;color:#1b275c;line-height:1}
+.a4-meta{border-collapse:collapse;font-size:8.8pt}
+.a4-meta th{text-align:left;font-weight:500;color:#6b7187;padding:.6mm 4mm .6mm 0}
+.a4-meta td{text-align:right;font-weight:600;padding:.6mm 0}
+.a4-mono{font-family:var(--f-mono);font-size:8.3pt}
+.a4-label{font-size:7.5pt;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#6b7187;margin-bottom:1.5mm}
+.a4-parties{display:grid;grid-template-columns:1fr 1fr;gap:10mm;background:#f4f5f9;border-radius:2mm;padding:4mm 6mm}
+.a4-table{width:100%;border-collapse:collapse}
+.a4-table th{text-align:left;font-size:7.5pt;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#4a5068;padding:2.2mm 2mm;border-bottom:1pt solid #1b275c;background:#f4f5f9}
+.a4-table td{padding:2mm 2mm;border-bottom:.5pt solid #e3e5ec;vertical-align:top;font-variant-numeric:tabular-nums}
+.a4-table .r{text-align:right}
+.a4-table tr{break-inside:avoid}
+.a4-compact td{padding:1.3mm 2mm;font-size:8.6pt}
+.a4-compact th{padding:1.4mm 2mm}
+.a4-totals-wrap{display:flex;justify-content:space-between;gap:10mm;align-items:flex-start}
+.a4-notes{flex:1;font-size:8.8pt;color:#4a5068}
+.a4-notes p,.a4-terms p{margin:0}
+.a4-totals{border-collapse:collapse;min-width:72mm;font-variant-numeric:tabular-nums}
+.a4-totals th{text-align:left;font-weight:500;color:#4a5068;padding:1.4mm 6mm 1.4mm 0}
+.a4-totals td{text-align:right;padding:1.4mm 0}
+.a4-total th,.a4-total td{border-top:.8pt solid #1a1d29;font-weight:700;color:#1a1d29;padding-top:2.4mm;font-size:10.5pt}
+.a4-due th,.a4-due td{background:#1b275c;color:#fff;font-weight:700;padding:2.4mm 3mm;font-size:10.5pt}
+.a4-block{break-inside:avoid}
+.a4-pay{display:flex;gap:6mm;align-items:center;border:.8pt solid #d9dce5;border-radius:2mm;padding:2.5mm 5mm;break-inside:avoid;font-size:8.8pt;color:#4a5068}
+.a4-link{color:#26357a;word-break:break-all;margin-top:1mm}
+.a4-terms{font-size:8.3pt;color:#4a5068}
+.a4-foot{margin-top:auto;padding-top:3mm;border-top:.5pt solid #e3e5ec;font-size:7.5pt;color:#8a8fa3;text-align:center}
+.a4-stamp{position:absolute;top:58mm;right:22mm;transform:rotate(-14deg);border:2.5pt solid #1e8457;color:#1e8457;font-family:var(--f-display);font-weight:700;font-size:26pt;letter-spacing:.12em;padding:1mm 5mm;border-radius:2mm;opacity:.8;pointer-events:none}
+
+/* Every printed page gets a 10mm top and bottom margin, so invoices that run long continue cleanly. */
+@page{size:A4;margin:10mm 0}
+@media print{
+  html,body{background:#fff!important;color-scheme:light}
+  :root{padding:0!important}
+  .print-bar,.toast{display:none!important}
+  .print-page{background:#fff;padding:0}
+  .print-scroll{overflow:visible;padding:0}
+  .a4{box-shadow:none;margin:0;width:210mm;min-height:0;padding-top:4mm;padding-bottom:0;overflow:visible}
+  .a4-foot{margin-top:3mm}
+  body{margin:0}
+}

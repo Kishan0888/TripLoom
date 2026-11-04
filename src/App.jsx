@@ -18,6 +18,8 @@ import Reconciliation from './pages/app/Reconciliation';
 import Items from './pages/app/Items';
 import Settings from './pages/app/Settings';
 import Pay from './pages/public/Pay';
+import PayInvoice from './pages/public/PayInvoice';
+import InvoicePrint from './pages/app/InvoicePrint';
 
 function Home() {
   const { loading, user, isAdmin, memberships } = useSession();
@@ -41,6 +43,8 @@ export default function App() {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/p/:token" element={<Pay />} />
+      <Route path="/p/:token/invoice" element={<PayInvoice />} />
+      <Route path="/o/:slug/invoices/:id/print" element={<RequireAuth><InvoicePrint /></RequireAuth>} />
       <Route path="/admin" element={<RequireAuth><AdminLayout /></RequireAuth>}>
         <Route index element={<AdminOrgs />} />
         <Route path="orgs/:id" element={<AdminOrg />} />
