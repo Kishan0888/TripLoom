@@ -26,7 +26,7 @@ export default function AdminOrgs() {
       <div className="kpis" style={{ gridTemplateColumns: 'repeat(3,minmax(0,1fr))' }}>
         <div className="kpi"><span className="k">Organisations</span><span className="v">{data?.length ?? '—'}</span><span className="s">{active} active</span></div>
         <div className="kpi"><span className="k">Collected through the platform</span><span className="v">{inr0(total)}</span><span className="s">Gross INR, all operators</span></div>
-        <div className="kpi"><span className="k">On live gateway</span><span className="v">{(data || []).filter((o) => o.gateway_env === 'live').length}</span><span className="s">Others are in demo or test mode</span></div>
+        <div className="kpi"><span className="k">Taking live payments</span><span className="v">{(data || []).filter((o) => o.payment_mode === 'live').length}</span><span className="s">Others are in demo mode</span></div>
       </div>
       <ErrorBox error={error} onRetry={reload} />
       {loading ? <Loading /> : (
@@ -37,12 +37,12 @@ export default function AdminOrgs() {
               {list.map((o) => (
                 <button key={o.id} className="orgcard" onClick={() => nav(`/admin/orgs/${o.id}`)}>
                   <div className="top">
-                    <span className="avatar" style={{ background: 'var(--brand-soft)', color: 'var(--brand)', width: 40, height: 40 }}>{initials(o.name)}</span>
+                    {o.logo_url ? <img src={o.logo_url} alt="" style={{ width: 40, height: 40, objectFit: 'contain', borderRadius: 8, background: 'var(--surface-2)' }} /> : <span className="avatar" style={{ background: 'var(--brand-soft)', color: 'var(--brand)', width: 40, height: 40 }}>{initials(o.name)}</span>}
                     <div style={{ minWidth: 0, flex: 1 }}><b style={{ display: 'block' }}>{o.name}</b><span className="muted mono" style={{ fontSize: 12 }}>/o/{o.slug}</span></div>
                     <Pill kind={o.status === 'active' ? 'ok' : 'late'}>{o.status === 'active' ? 'Active' : 'Suspended'}</Pill>
                   </div>
                   <div className="stats"><div><b>{o.members}</b>users</div><div><b>{o.invoices}</b>invoices</div><div><b>{inr0(o.collected_inr)}</b>collected</div></div>
-                  <span className="muted" style={{ fontSize: 12.5 }}>Owner {o.owner_email || '—'} · {o.gateway_env === 'live' ? 'Live gateway' : o.gateway_env === 'test' ? 'Test gateway' : 'Demo mode'} · since {fd(o.created_at)}</span>
+                  <span className="muted" style={{ fontSize: 12.5 }}>Owner {o.owner_email || '—'} · {o.payment_mode === 'live' ? `Live · ${o.gateways || 'no gateway'}` : 'Demo mode'} · since {fd(o.created_at)}</span>
                 </button>
               ))}
             </div>
@@ -114,7 +114,7 @@ export function CreatedModal({ r, onClose, title = 'Workspace ready' }) {
   const text = `Your TripLoom Payments login\nSign in: ${window.location.origin}/login\nEmail: ${who.email}${who.temp_password ? `\nTemporary password: ${who.temp_password}` : ''}`;
   return (
     <Modal title={title} onClose={onClose} footer={<><button className="btn" onClick={() => copyText(text, toast)}>Copy login details</button><button className="btn primary" onClick={onClose}>Done</button></>}>
-      {r.org && <p className="sub">{r.org.name} is live at <span className="mono">{url.replace(/^https?:\/\//, '')}</span>.</p>}
+      {r.org && <p className="sub">{r.org.name} is live at <span className="mono">{url.replace(/^https?:\/\//, '')}</span>. You can add their logo from the organisation page.</p>}
       {who.temp_password ? (
         <>
           <p>Share these details with {who.email}. They should change the password after first sign-in (Settings → My account).</p>

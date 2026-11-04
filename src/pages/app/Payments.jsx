@@ -5,16 +5,17 @@ import { useLoad } from '../../lib/session';
 import { useOrg } from '../../components/OrgLayout';
 import { Loading, ErrorBox, SettlePill, Empty } from '../../components/ui';
 import { money, inr0, fds, istDate, istTime } from '../../lib/format';
+import { providerName } from '../../lib/gateways';
 
 export function PayTable({ rows, base, onInvoice }) {
   if (!rows.length) return <Empty>No payments in this view.</Empty>;
   return (
-    <div className="tw"><table className="t"><thead><tr><th>Date</th>{!onInvoice && <th>Customer & invoice</th>}<th>CCAvenue ref.</th><th className="right">Amount paid</th><th className="right">INR gross</th><th className="right">Fee</th><th className="right">Net to bank</th><th>Settlement</th></tr></thead><tbody>
+    <div className="tw"><table className="t"><thead><tr><th>Date</th>{!onInvoice && <th>Customer & invoice</th>}<th>Gateway & reference</th><th className="right">Amount paid</th><th className="right">INR gross</th><th className="right">Fee</th><th className="right">Net to bank</th><th>Settlement</th></tr></thead><tbody>
       {rows.map((p) => (
         <tr key={p.id}>
           <td>{fds(istDate(p.paid_at))}<span className="l2">{istTime(p.paid_at)}</span></td>
           {!onInvoice && <td><b>{p.customer_name}</b><span className="l2"><Link className="link" to={`${base}/invoices/${p.invoice_id}`}>{p.invoice_number}</Link></span></td>}
-          <td><span className="mono">{p.tracking_id || '—'}</span><span className="l2">{p.method}</span></td>
+          <td><span className="mono">{p.tracking_id || '—'}</span><span className="l2">{providerName(p.gateway)} · {p.method}</span></td>
           <td className="right num"><b>{money(p.amount, p.currency)}</b>{p.currency !== 'INR' && <span className="l2">@ {Number(p.fx_rate)}</span>}</td>
           <td className="right num">{money(p.inr_amount, 'INR')}</td>
           <td className="right num muted">−{money(p.fee_inr, 'INR')}</td>
@@ -39,10 +40,10 @@ export default function Payments() {
   const chip = (k, l) => <button className={`chip ${f === k ? 'on' : ''}`} onClick={() => setF(k)}>{l}</button>;
   return (
     <>
-      <div className="pagehead"><div><h1>Payments</h1><p className="sub">Every payment captured on your CCAvenue account, converted to INR.</p></div></div>
+      <div className="pagehead"><div><h1>Payments</h1><p className="sub">Every payment captured through your gateways or recorded by your team, converted to INR.</p></div></div>
       <div className="kpis" style={{ gridTemplateColumns: 'repeat(3,minmax(0,1fr))' }}>
         <div className="kpi"><span className="k">Gross received</span><span className="v">{inr0(g)}</span><span className="s">{rows.length} payments in view</span></div>
-        <div className="kpi"><span className="k">Gateway fees</span><span className="v">{inr0(fe)}</span><span className="s">{Number(org.fee_pct)}% + {Number(org.fee_gst)}% GST (from settings)</span></div>
+        <div className="kpi"><span className="k">Gateway fees</span><span className="v">{inr0(fe)}</span><span className="s">Estimated from each gateway’s fee + {Number(org.fee_gst)}% GST</span></div>
         <div className="kpi"><span className="k">Net to bank</span><span className="v">{inr0(g - fe)}</span><span className="s">Expected T+{org.settle_days} from payment</span></div>
       </div>
       <section className="card">

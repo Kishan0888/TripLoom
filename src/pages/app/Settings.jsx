@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
-import { supabase, must, FUNCTIONS_URL } from '../../lib/supabase';
+import { supabase, must } from '../../lib/supabase';
+import GatewaySettings from '../../components/GatewaySettings';
+import LogoUpload from '../../components/LogoUpload';
 import { useLoad, useSession } from '../../lib/session';
 import { useOrg } from '../../components/OrgLayout';
-import { Loading, Field, Pill, Icon, Modal, useToast, copyText } from '../../components/ui';
-import { CURRENCIES, ROLE_LBL, fd } from '../../lib/format';
+import { Loading, Field, Pill, Icon, Modal, useToast } from '../../components/ui';
+import { ROLE_LBL, fd } from '../../lib/format';
 import { AddMember } from '../admin/AdminOrg';
 import { CreatedModal } from '../admin/AdminOrgs';
 
@@ -26,48 +28,7 @@ export default function Settings() {
 
 const OwnerNote = () => <div className="alert info" style={{ marginBottom: 16 }}>Only the organisation owner can change these settings.</div>;
 
-function Gateway() {
-  const { org, role } = useOrg();
-  const toast = useToast();
-  const owner = role === 'owner';
-  const { data, loading, reload } = useLoad(async () => must(await supabase.rpc('get_gateway_config', { p_org: org.id })), [org.id]);
-  const [f, setF] = useState(null);
-  const [fees, setFees] = useState({ fee_pct: org.fee_pct, settle_days: org.settle_days });
-  useEffect(() => { if (data) setF({ environment: data.environment, merchant_id: data.merchant_id || '', access_code: data.access_code || '', working_key: '', currencies: data.currencies }); }, [data]);
-  if (loading || !f) return <Loading />;
-  const ret = `${FUNCTIONS_URL}/ccavenue/response`;
-  async function save() {
-    if (f.environment !== 'demo' && (!f.merchant_id || !f.access_code || (!data.has_working_key && !f.working_key))) { toast('Enter merchant ID, access code and working key to use test or live mode.'); return; }
-    const { error } = await supabase.rpc('save_gateway_config', { p_org: org.id, p_env: f.environment, p_merchant: f.merchant_id || null, p_access: f.access_code || null, p_key: f.working_key || null, p_currencies: f.currencies });
-    if (error) { toast(error.message); return; }
-    const e2 = await supabase.from('organizations').update({ fee_pct: Number(fees.fee_pct), settle_days: parseInt(fees.settle_days, 10) || 0 }).eq('id', org.id);
-    toast(e2.error ? e2.error.message : 'Gateway settings saved'); reload();
-  }
-  const envLbl = { demo: 'Demo mode', test: 'Test', live: 'Live' };
-  return (
-    <>
-      {!owner && <OwnerNote />}
-      <div className="gw"><span className="logo">CCA</span><div style={{ flex: 1, minWidth: 180 }}><b>CCAvenue</b><div className="muted" style={{ fontSize: 12.5 }}>Your own merchant account. Money settles straight to your bank.</div></div>
-        <Pill kind={data.environment === 'live' ? 'ok' : data.environment === 'test' ? 'info' : 'awaiting'}>{envLbl[data.environment]}{data.has_working_key ? ' · keys saved' : ''}</Pill></div>
-      {f.environment === 'demo' && <div className="alert warn" style={{ marginTop: 14 }}>Demo mode: the payment page completes payments without charging anyone. Switch to Test or Live once your CCAvenue keys are ready.</div>}
-      <fieldset disabled={!owner} style={{ border: 0, padding: 0, margin: 0 }}>
-        <div className="fgrid" style={{ marginTop: 18 }}>
-          <Field label="Mode" id="g-mode"><select className="in" id="g-mode" value={f.environment} onChange={(e) => setF({ ...f, environment: e.target.value })}><option value="demo">Demo (no real charges)</option><option value="test">Test (CCAvenue sandbox)</option><option value="live">Live</option></select></Field>
-          <Field label="Merchant ID" id="g-mid"><input className="in mono" id="g-mid" value={f.merchant_id} onChange={(e) => setF({ ...f, merchant_id: e.target.value })} /></Field>
-          <Field label="Access code" id="g-acc"><input className="in mono" id="g-acc" value={f.access_code} onChange={(e) => setF({ ...f, access_code: e.target.value })} /></Field>
-          <Field label="Working key" id="g-key" hint={data.has_working_key ? 'A key is saved. Leave blank to keep it.' : 'Stored on the server. Never shown again after saving.'}><input className="in mono" id="g-key" type="password" autoComplete="off" value={f.working_key} onChange={(e) => setF({ ...f, working_key: e.target.value })} placeholder={data.has_working_key ? '••••••••••••' : ''} /></Field>
-          <Field label="Redirect and cancel URL" id="g-ret" span hint="Register this URL for both redirect and cancel in your CCAvenue dashboard, and whitelist payments.triploom.in.">
-            <div className="copyrow"><input className="in" id="g-ret" readOnly value={ret} /><button type="button" className="btn" onClick={() => copyText(ret, toast)}>Copy</button></div></Field>
-          <Field label="Currencies enabled on your account" id="g-cur" span hint="Multi-currency processing must also be activated by CCAvenue.">
-            <div className="curgrid">{CURRENCIES.map((c) => <label key={c} className="check"><input type="checkbox" id={`cur-${c}`} checked={f.currencies.includes(c)} onChange={(e) => setF({ ...f, currencies: e.target.checked ? [...f.currencies, c] : f.currencies.filter((x) => x !== c) })} />{c}</label>)}</div></Field>
-          <Field label="Gateway fee (%)" id="g-fee" hint={`Used to estimate net payout. GST at ${Number(org.fee_gst)}% is added.`}><input className="in num" id="g-fee" type="number" step="0.01" value={fees.fee_pct} onChange={(e) => setFees({ ...fees, fee_pct: e.target.value })} /></Field>
-          <Field label="Settlement cycle (days)" id="g-settle" hint="Drives “expected by” dates in reconciliation."><input className="in num" id="g-settle" type="number" value={fees.settle_days} onChange={(e) => setFees({ ...fees, settle_days: e.target.value })} /></Field>
-        </div>
-        {owner && <button className="btn primary" style={{ marginTop: 18 }} onClick={save}>Save</button>}
-      </fieldset>
-    </>
-  );
-}
+const Gateway = GatewaySettings;
 
 function Company() {
   const { org, role, reloadOrg } = useOrg();
@@ -81,6 +42,7 @@ function Company() {
   return (
     <fieldset disabled={role !== 'owner'} style={{ border: 0, padding: 0, margin: 0 }}>
       {role !== 'owner' && <OwnerNote />}
+      <div style={{ marginBottom: 20 }}><h3 style={{ marginBottom: 10 }}>Logo</h3><LogoUpload org={org} canEdit={role === 'owner'} toast={toast} onChange={() => reloadOrg()} /></div>
       <div className="fgrid">
         <Field label="Company name" id="co-name" span><input className="in" id="co-name" value={f.name} onChange={s('name')} /></Field>
         <Field label="Billing email" id="co-email" hint="Shown to customers on the payment page."><input className="in" id="co-email" value={f.email} onChange={s('email')} /></Field>

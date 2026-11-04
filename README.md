@@ -18,17 +18,17 @@ Roles inside an organisation: **Owner** (everything incl. gateway keys and team)
 
 - Frontend: React + Vite (this repo), deploy on Vercel
 - Backend: Supabase project `triploom-payments` (ref `ptnavmtxxfkyuuuexigk`, Mumbai region)
-  - Postgres tables, views (`invoice_summary`, `instalment_status`, `payment_details`) and RPCs (`create_invoice`, `get_public_invoice`, `demo_pay`, `get_gateway_config`, `save_gateway_config`, `admin_org_overview`, `my_context`)
+  - Postgres tables, views (`invoice_summary`, `instalment_status`, `payment_details`) and RPCs (`create_invoice`, `get_public_invoice`, `demo_pay`, `list_gateways`, `save_gateway`, `delete_gateway`, `record_manual_payment`, `admin_org_overview`, `my_context`)
   - Edge function `admin-onboard`: create organisation + owner login, add members, suspend
-  - Edge function `ccavenue`: `/initiate` encrypts the order for CCAvenue's hosted page; `/response` decrypts the result, records the payment and redirects the traveller back to `/p/<token>?status=…`
-- CCAvenue working keys live in `gateway_configs`, which has no browser access at all; only edge functions read it.
+  - Edge function `gateway`: starts payments and confirms them for Razorpay, CCAvenue, PayU, Cashfree, PayPal, Stripe and custom gateways
+- Gateway credentials live in `gateway_accounts`, which has no browser access at all; only edge functions read it.
 
 To pull the schema and functions into this repo with the Supabase CLI:
 ```
 supabase link --project-ref ptnavmtxxfkyuuuexigk
 supabase db pull
 supabase functions download admin-onboard
-supabase functions download ccavenue
+supabase functions download gateway
 ```
 
 ## Run locally
@@ -45,19 +45,36 @@ npm run dev
 2. Add environment variables `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` (values in `.env.example`).
 3. In Vercel → Domains, add `payments.triploom.in`, then add the CNAME record it shows at your DNS provider.
 4. In Supabase → Authentication → URL configuration, set Site URL to `https://payments.triploom.in`.
-5. In Supabase → Edge Functions → Secrets, add `APP_URL=https://payments.triploom.in` (where CCAvenue sends travellers back).
+5. In Supabase → Edge Functions → Secrets, add `APP_URL=https://payments.triploom.in` (where gateways send travellers back).
 6. In Supabase → Authentication → Providers → Email, turn off "Allow new users to sign up" (accounts are created by the admin console), and turn on leaked-password protection.
 
-## Going live with CCAvenue (per operator)
+## Payment gateways (per organisation)
 
-1. Operator owner opens Settings → Payment gateway, enters Merchant ID, Access code and Working key, picks **Test**, saves.
-2. In the CCAvenue dashboard, register the redirect/cancel URL shown on that screen and whitelist `payments.triploom.in`.
-3. Run a test payment from a payment link, then switch to **Live**.
+Owners connect one or more gateways in **Settings → Payment gateway**. Each invoice's payment page offers every enabled gateway that accepts its currency.
 
-While an organisation is in **Demo** mode, the payment page completes payments without charging anyone (useful for client demos).
+| Gateway | What the owner enters | How payment is confirmed |
+|---|---|---|
+| Razorpay | Key ID, Key secret, Webhook secret (optional) | Checkout signature check + payment fetch; webhook `payment.captured` as backup |
+| CCAvenue | Merchant ID, Access code, Working key | Encrypted response decrypted with the working key |
+| PayU | Merchant key, Merchant salt | Reverse SHA-512 hash check |
+| Cashfree | App ID, Secret key | Order status fetched from Cashfree (`PAID`) |
+| PayPal | Client ID, Client secret | Order captured on return (`COMPLETED`) |
+| Stripe | Secret key | Checkout Session fetched (`payment_status = paid`) |
+| Custom | Payment page URL with placeholders | Signed webhook (`X-TripLoom-Signature`, HMAC-SHA256) or "Record payment" on the invoice |
+
+All gateway calls go through the `gateway` edge function (`supabase/functions/gateway/index.ts`). Secrets live in `gateway_accounts`, which has no browser access.
+
+Payment mode: **Demo** completes payments without charging (for demos); **Live** uses the connected gateways. Test vs Live is set per gateway.
+
+Team members with Owner or Accounts roles can also **record a payment** on an invoice for money received outside the link (bank transfer, cash, cheque).
+
+## Logos
+
+Owners upload a logo in Settings → Company (platform admins can do it from the organisation page). It appears on the invoice, the payment page and the workspace sidebar. Files are stored in the public `org-logos` storage bucket.
 
 ## Not built yet (next phase)
 
 - Outgoing email: invoice emails, reminders before/after due dates (needs a transactional email provider; "Send reminder" currently logs to the activity timeline)
-- CCAvenue settlement report import for automatic reconciliation
+- Settlement report import for automatic reconciliation
+- Webhooks for Stripe, PayPal, Cashfree and PayU (today they confirm on return; Razorpay and custom already have webhooks)
 - Editing a sent invoice, refunds, PDF invoices

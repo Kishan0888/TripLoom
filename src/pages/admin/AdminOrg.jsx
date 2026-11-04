@@ -5,6 +5,7 @@ import { useLoad, useSession } from '../../lib/session';
 import { Loading, ErrorBox, Pill, Modal, Field, Icon, useToast } from '../../components/ui';
 import { fd, inr0, ROLE_LBL } from '../../lib/format';
 import { CreatedModal } from './AdminOrgs';
+import LogoUpload from '../../components/LogoUpload';
 
 export default function AdminOrg() {
   const { id } = useParams();
@@ -14,7 +15,7 @@ export default function AdminOrg() {
     const [org, members, gw, ov] = await Promise.all([
       supabase.from('organizations').select('*').eq('id', id).single(),
       supabase.from('org_members').select('*').eq('org_id', id).order('created_at'),
-      supabase.rpc('get_gateway_config', { p_org: id }),
+      supabase.rpc('list_gateways', { p_org: id }),
       supabase.rpc('admin_org_overview'),
     ]);
     return { org: must(org), members: must(members), gw: must(gw), stats: (must(ov) || []).find((o) => o.id === id) };
@@ -50,7 +51,7 @@ export default function AdminOrg() {
         <div className="kpi"><span className="k">Team members</span><span className="v">{members.length}</span></div>
         <div className="kpi"><span className="k">Invoices sent</span><span className="v">{stats?.invoices ?? 0}</span></div>
         <div className="kpi"><span className="k">Collected</span><span className="v">{inr0(stats?.collected_inr)}</span></div>
-        <div className="kpi"><span className="k">Gateway</span><span className="v" style={{ fontSize: 20 }}>{gw.environment === 'live' ? 'Live' : gw.environment === 'test' ? 'Test' : 'Demo mode'}</span><span className="s">{gw.merchant_id ? `CCAvenue ${gw.merchant_id}` : 'CCAvenue not connected yet'}</span></div>
+        <div className="kpi"><span className="k">Payments</span><span className="v" style={{ fontSize: 20 }}>{org.payment_mode === 'live' ? 'Live' : 'Demo mode'}</span><span className="s">{gw.filter((g) => g.enabled).map((g) => g.label).join(', ') || 'No gateway connected yet'}</span></div>
       </div>
       <div className="grid2">
         <section className="card">
@@ -60,7 +61,9 @@ export default function AdminOrg() {
           </tbody></table></div>
         </section>
         <section className="card">
-          <h2 style={{ marginBottom: 12 }}>Company details</h2>
+          <h2 style={{ marginBottom: 12 }}>Logo</h2>
+          <LogoUpload org={org} canEdit toast={toast} onChange={reload} />
+          <h2 style={{ margin: '20px 0 12px' }}>Company details</h2>
           <dl className="kv">
             <dt>Billing email</dt><dd>{org.email || '—'}</dd><dt>Phone</dt><dd>{org.phone || '—'}</dd><dt>GSTIN</dt><dd>{org.gstin || '—'}</dd>
             <dt>Address</dt><dd>{org.address || '—'}</dd><dt>Invoice format</dt><dd className="mono">{org.invoice_prefix}/{org.fy}/{String(org.next_invoice_no).padStart(4, '0')}</dd>

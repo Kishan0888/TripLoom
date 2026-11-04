@@ -78,6 +78,7 @@ export default function OrgLayout() {
         <aside className="side" style={open ? { transform: 'none', boxShadow: 'var(--shadow)' } : undefined}>
           <div className="brandmark"><LogoMark /><div><b>TripLoom</b><small>Payments</small></div></div>
           <button className="opbox orgswitch" onClick={() => nav('/')} title="Switch workspace">
+            {org.logo_url && <img src={org.logo_url} alt="" style={{ maxHeight: 34, maxWidth: '100%', objectFit: 'contain', display: 'block', marginBottom: 6 }} />}
             <b>{org.name}</b><span>{ROLE_LBL[role]} · switch workspace</span>
           </button>
           <nav className="nav">

@@ -69,7 +69,7 @@ export default function Dashboard() {
         <div className="kpi loud"><span className="k"><i style={{ background: 'var(--thread)' }} />Awaiting bank credit</span><span className="v">{inr0(awaiting)}</span><span className="s">{unrec.length} payouts to match{lateN ? ` · ${lateN} late` : ''}</span></div>
       </div>
       <div className="grid2">
-        <section className="card"><div className="card-h"><div><h2>Collections by month</h2><p>Gross INR received through CCAvenue</p></div></div><div className="chart"><BarChart pays={pays} /></div></section>
+        <section className="card"><div className="card-h"><div><h2>Collections by month</h2><p>Gross INR received through your gateways</p></div></div><div className="chart"><BarChart pays={pays} /></div></section>
         <section className="card"><div className="card-h"><div><h2>Due in the next 14 days</h2><p>Including anything overdue</p></div></div>
           <div className="rowlist">
             {dues.length === 0 ? <div className="empty">Nothing due in the next two weeks.</div> : dues.slice(0, 6).map((d) => (
@@ -82,7 +82,7 @@ export default function Dashboard() {
           </div>
         </section>
       </div>
-      <section className="card"><div className="card-h"><div><h2>Recent payments</h2><p>Captured on CCAvenue, newest first</p></div><Link className="btn sm" to={`${base}/payments`}>View all</Link></div>
+      <section className="card"><div className="card-h"><div><h2>Recent payments</h2><p>Newest first</p></div><Link className="btn sm" to={`${base}/payments`}>View all</Link></div>
         <PayTable rows={pays.slice(0, 5)} base={base} /></section>
       {modal === 'quick' && <QuickLinkModal onClose={() => setModal(null)} />}
       {modal === 'cust' && <CustomerModal onClose={() => setModal(null)} onSaved={() => { setModal(null); toast('Customer added'); }} />}

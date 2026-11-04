@@ -33,7 +33,7 @@ export default function Login() {
         <div className="brandmark"><LogoMark size={38} /><div><b style={{ color: 'var(--loom-ink)' }}>TripLoom</b><small>Payments</small></div></div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <h1>Collect every instalment, in every currency.</h1>
-          <p>Invoice international travellers, split trips into deposits and balances, send CCAvenue payment links, and match every payout to your bank account.</p>
+          <p>Invoice international travellers, split trips into deposits and balances, send payment links through Razorpay, CCAvenue, PayPal and more, and match every payout to your bank account.</p>
         </div>
         <ul><li>Payment links in USD, EUR, GBP, AUD, AED and INR</li><li>Deposit and balance schedules with reminders</li><li>Bank credit reconciliation for every payment</li></ul>
       </section>

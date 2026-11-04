@@ -21,10 +21,10 @@ export default function Reconciliation() {
 
   return (
     <>
-      <div className="pagehead"><div><h1>Reconciliation</h1><p className="sub">Match each CCAvenue payout to the credit in your bank account, usually {org.settle_days} days after payment.</p></div></div>
+      <div className="pagehead"><div><h1>Reconciliation</h1><p className="sub">Match each gateway payout to the credit in your bank account, usually {org.settle_days} days after payment.</p></div></div>
       <div className="kpis">
         <div className="kpi loud"><span className="k">Awaiting credit</span><span className="v">{inr0(pend.reduce((a, p) => a + Number(p.net_inr), 0))}</span><span className="s">{pend.length} payouts</span></div>
-        <div className="kpi"><span className="k"><i style={{ background: 'var(--bad)' }} />Credit late</span><span className="v">{late.length}</span><span className="s">Past T+{org.settle_days}. Check with CCAvenue.</span></div>
+        <div className="kpi"><span className="k"><i style={{ background: 'var(--bad)' }} />Credit late</span><span className="v">{late.length}</span><span className="s">Past T+{org.settle_days}. Check with your gateway.</span></div>
         <div className="kpi"><span className="k"><i style={{ background: 'var(--good)' }} />Reconciled</span><span className="v">{inr0(done.reduce((a, p) => a + Number(p.credit_amount), 0))}</span><span className="s">{done.length} credits logged</span></div>
         <div className="kpi"><span className="k">Net difference</span><span className="v" style={Math.abs(variance) >= 0.005 ? { color: 'var(--bad)' } : undefined}>{variance < 0 ? '−' : ''}{money(Math.abs(variance), 'INR')}</span><span className="s">Credited minus expected</span></div>
       </div>
@@ -32,7 +32,7 @@ export default function Reconciliation() {
         <div className="tabs"><button className={`tab ${tab === 'pending' ? 'on' : ''}`} onClick={() => setTab('pending')}>Awaiting bank credit ({pend.length})</button><button className={`tab ${tab === 'done' ? 'on' : ''}`} onClick={() => setTab('done')}>Reconciled ({done.length})</button></div>
         <div style={{ marginTop: 16 }}>
           {tab === 'pending' ? (pend.length === 0 ? <Empty>Every payment is matched to a bank credit.</Empty> : (
-            <div className="tw"><table className="t"><thead><tr><th>Paid on</th><th>Customer & invoice</th><th>CCAvenue ref.</th><th className="right">Expected net</th><th>Expected by</th><th>Status</th><th /></tr></thead><tbody>
+            <div className="tw"><table className="t"><thead><tr><th>Paid on</th><th>Customer & invoice</th><th>Gateway ref.</th><th className="right">Expected net</th><th>Expected by</th><th>Status</th><th /></tr></thead><tbody>
               {pend.map((p) => { const lateBy = diffDays(p.expected_credit_date, today()); return (
                 <tr key={p.id}>
                   <td>{fds(istDate(p.paid_at))}</td>
@@ -82,7 +82,7 @@ function CreditModal({ p, onClose, onSaved }) {
     <Modal title="Log bank credit" sub={`${p.customer_name} · ${p.invoice_number}`} onClose={onClose}
       footer={<><button className="btn ghost" onClick={onClose}>Cancel</button><button className="btn primary" onClick={save} disabled={busy}>{busy ? 'Saving…' : 'Mark as reconciled'}</button></>}>
       <dl className="kv" style={{ background: 'var(--surface-2)', padding: '12px 14px', borderRadius: 10 }}>
-        <dt>Payment</dt><dd>{money(p.amount, p.currency)} on {fd(istDate(p.paid_at))}</dd><dt>CCAvenue ref.</dt><dd className="mono">{p.tracking_id}</dd><dt>Expected net</dt><dd className="num">{money(p.net_inr, 'INR')}</dd>
+        <dt>Payment</dt><dd>{money(p.amount, p.currency)} on {fd(istDate(p.paid_at))}</dd><dt>Gateway ref.</dt><dd className="mono">{p.tracking_id}</dd><dt>Expected net</dt><dd className="num">{money(p.net_inr, 'INR')}</dd>
       </dl>
       <div className="fgrid">
         <Field label="Credit date" id="lc-date"><input className="in" id="lc-date" type="date" value={f.date} onChange={(e) => setF({ ...f, date: e.target.value })} /></Field>

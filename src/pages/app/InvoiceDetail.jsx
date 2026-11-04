@@ -3,8 +3,9 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import { supabase, must } from '../../lib/supabase';
 import { useLoad } from '../../lib/session';
 import { useOrg } from '../../components/OrgLayout';
-import { Loading, ErrorBox, Icon, StatusPill, InstPill, When, Modal, useToast, copyText } from '../../components/ui';
-import { money, fd, fds, payLink, istDate } from '../../lib/format';
+import { Loading, ErrorBox, Icon, StatusPill, InstPill, When, Modal, Field, useToast, copyText } from '../../components/ui';
+import { OrgLogo } from '../../components/LogoUpload';
+import { money, fd, fds, payLink, istDate, today } from '../../lib/format';
 import { PayTable } from './Payments';
 
 // Logs a reminder. Email delivery is wired up in the next phase (transactional email provider).
@@ -15,8 +16,9 @@ export async function remind(orgId, invoiceId, name, toast) {
 
 export default function InvoiceDetail() {
   const { id } = useParams();
-  const { org, base, refreshCounts } = useOrg();
+  const { org, base, refreshCounts, can } = useOrg();
   const nav = useNavigate();
+  const [recording, setRecording] = useState(false);
   const toast = useToast();
   const [confirm, setConfirm] = useState(null);
   const { data, loading, error, reload } = useLoad(async () => {
@@ -68,6 +70,7 @@ export default function InvoiceDetail() {
           {i.status === 'sent' && <>
             {i.display_status !== 'paid' && <><button className="btn" onClick={() => remind(org.id, i.id, i.customer_name, toast).then(reload)}><Icon name="bell" />Send reminder</button>
               <button className="btn" onClick={() => copyText(link, toast)}><Icon name="link" />Copy payment link</button></>}
+            {i.display_status !== 'paid' && can(['owner', 'accounts']) && <button className="btn" onClick={() => setRecording(true)}>Record payment</button>}
             {Number(i.paid) === 0 && <button className="btn ghost" onClick={() => setConfirm('cancel')}>Cancel invoice</button>}
             <a className="btn primary" href={link} target="_blank" rel="noreferrer"><Icon name="eye" />Customer view</a>
           </>}
@@ -76,6 +79,13 @@ export default function InvoiceDetail() {
       <div className="grid2">
         <div style={{ display: 'flex', flexDirection: 'column', gap: 18, minWidth: 0 }}>
           <section className="card">
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap', alignItems: 'flex-start', paddingBottom: 16, marginBottom: 16, borderBottom: '1px solid var(--line)' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {org.logo_url ? <OrgLogo org={org} size={48} /> : <b style={{ fontFamily: 'var(--f-display)', fontSize: 18 }}>{org.name}</b>}
+                <span className="muted" style={{ fontSize: 12.5 }}>{[org.address, org.gstin && `GSTIN ${org.gstin}`].filter(Boolean).join(' · ')}</span>
+              </div>
+              <div style={{ textAlign: 'right' }}><span className="eyebrow">Invoice</span><div className="mono" style={{ fontSize: 14 }}>{i.number}</div><span className="muted" style={{ fontSize: 12.5 }}>Issued {fd(i.issue_date)}</span></div>
+            </div>
             <div className="amounts"><div><span>Invoice total</span><b>{money(i.total, i.currency)}</b></div><div><span>Collected</span><b style={{ color: 'var(--good)' }}>{money(i.paid, i.currency)}</b></div><div><span>Balance</span><b>{money(Math.max(0, i.due), i.currency)}</b></div></div>
             <div className="prog" style={{ marginTop: 14, height: 8 }}><span style={{ width: `${pc}%` }} /></div>
           </section>
@@ -111,6 +121,7 @@ export default function InvoiceDetail() {
             <div className="timeline">{events.map((e, k) => <div className="ev" key={k}><time>{fds(istDate(e.date))}</time><span>{e.text}</span></div>)}</div></section>
         </div>
       </div>
+      {recording && <RecordPayment inv={i} onClose={() => setRecording(false)} onSaved={(m) => { setRecording(false); toast(m); refreshCounts(); reload(); }} />}
       {confirm && (
         <Modal title={confirm === 'delete' ? 'Delete this draft?' : 'Cancel this invoice?'} onClose={() => setConfirm(null)}
           footer={<><button className="btn ghost" onClick={() => setConfirm(null)}>Keep it</button><button className="btn primary" onClick={() => act2(confirm)}>{confirm === 'delete' ? 'Delete draft' : 'Cancel invoice'}</button></>}>
@@ -118,5 +129,32 @@ export default function InvoiceDetail() {
         </Modal>
       )}
     </>
+  );
+}
+
+function RecordPayment({ inv, onClose, onSaved }) {
+  const [f, setF] = useState({ amount: Number(inv.next_due_amount ?? inv.due).toFixed(2), date: today(), method: 'Bank transfer', reference: '' });
+  const [err, setErr] = useState(null);
+  const [busy, setBusy] = useState(false);
+  async function save() {
+    if (!(Number(f.amount) > 0) || Number(f.amount) > Number(inv.due) + 0.005) { setErr(`Enter an amount up to the balance of ${money(inv.due, inv.currency)}.`); return; }
+    setBusy(true);
+    const { error } = await supabase.rpc('record_manual_payment', { p_invoice: inv.id, p_amount: Number(f.amount), p_paid_on: f.date, p_method: f.method, p_reference: f.reference.trim() });
+    if (error) { setErr(error.message); setBusy(false); return; }
+    onSaved(`${money(f.amount, inv.currency)} recorded`);
+  }
+  return (
+    <Modal title="Record a payment" sub={`${inv.number} · balance ${money(inv.due, inv.currency)}`} onClose={onClose}
+      footer={<><button className="btn ghost" onClick={onClose}>Cancel</button><button className="btn primary" onClick={save} disabled={busy}>{busy ? 'Saving…' : 'Record payment'}</button></>}>
+      <p className="muted" style={{ fontSize: 13 }}>For money received outside the payment link: a bank transfer, cash, or a custom gateway without a webhook.</p>
+      <div className="fgrid">
+        <Field label={`Amount (${inv.currency})`} id="rp-amt"><input className="in num" id="rp-amt" type="number" step="0.01" min="0" value={f.amount} onChange={(e) => setF({ ...f, amount: e.target.value })} /></Field>
+        <Field label="Received on" id="rp-date"><input className="in" id="rp-date" type="date" value={f.date} onChange={(e) => setF({ ...f, date: e.target.value })} /></Field>
+        <Field label="Method" id="rp-method"><select className="in" id="rp-method" value={f.method} onChange={(e) => setF({ ...f, method: e.target.value })}>
+          {['Bank transfer', 'UPI', 'Cash', 'Cheque', 'Card machine', 'Other gateway'].map((m) => <option key={m}>{m}</option>)}</select></Field>
+        <Field label="Reference (optional)" id="rp-ref"><input className="in mono" id="rp-ref" placeholder="UTR, cheque no. or transaction ID" value={f.reference} onChange={(e) => setF({ ...f, reference: e.target.value })} /></Field>
+      </div>
+      {err && <div className="alert bad">{err}</div>}
+    </Modal>
   );
 }
