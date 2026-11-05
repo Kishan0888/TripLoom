@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase, must } from '../../lib/supabase';
 import GatewaySettings from '../../components/GatewaySettings';
 import LogoUpload from '../../components/LogoUpload';
+import EmailSettings from '../../components/EmailSettings';
 import { useLoad, useSession } from '../../lib/session';
 import { useOrg } from '../../components/OrgLayout';
 import { Loading, Field, Pill, Icon, Modal, useToast } from '../../components/ui';
@@ -12,14 +13,14 @@ import { CreatedModal } from '../admin/AdminOrgs';
 export default function Settings() {
   const { role } = useOrg();
   const [tab, setTab] = useState(role === 'owner' ? 'gateway' : 'account');
-  const tabs = [['gateway', 'Payment gateway'], ['company', 'Company'], ['invoice', 'Invoices'], ['team', 'Team'], ['account', 'My account']];
+  const tabs = [['gateway', 'Payment gateway'], ['company', 'Company'], ['invoice', 'Invoices'], ['email', 'Email'], ['team', 'Team'], ['account', 'My account']];
   return (
     <>
       <div className="pagehead"><div><h1>Settings</h1><p className="sub">Gateway, company, invoice numbering, team and your account.</p></div></div>
       <section className="card">
         <div className="tabs">{tabs.map(([k, l]) => <button key={k} className={`tab ${tab === k ? 'on' : ''}`} onClick={() => setTab(k)}>{l}</button>)}</div>
         <div style={{ marginTop: 20, maxWidth: 760 }}>
-          {tab === 'gateway' && <Gateway />}{tab === 'company' && <Company />}{tab === 'invoice' && <InvoiceSettings />}{tab === 'team' && <Team />}{tab === 'account' && <Account />}
+          {tab === 'gateway' && <Gateway />}{tab === 'company' && <Company />}{tab === 'invoice' && <InvoiceSettings />}{tab === 'email' && <EmailSettings />}{tab === 'team' && <Team />}{tab === 'account' && <Account />}
         </div>
       </section>
     </>

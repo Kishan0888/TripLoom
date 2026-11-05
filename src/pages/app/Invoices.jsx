@@ -5,6 +5,7 @@ import { useLoad } from '../../lib/session';
 import { useOrg } from '../../components/OrgLayout';
 import { Loading, ErrorBox, Icon, StatusPill, Modal, Field, Empty, useToast } from '../../components/ui';
 import { money, fds, today, addDays, CURRENCIES } from '../../lib/format';
+import { emailInvoice } from '../../lib/email';
 
 export default function Invoices() {
   const { org, base } = useOrg();
@@ -86,7 +87,9 @@ export function QuickLinkModal({ onClose }) {
       org_id: org.id, customer_id: f.customer_id, currency: f.currency, trip: f.purpose.trim(), pax: 1, tax_pct: 0, send: true,
       lines: [{ description: f.purpose.trim(), qty: 1, rate: Number(f.amount) }], instalments: [{ label: 'Full payment', pct: 100, due_date: f.due }] } });
     if (error) { setErr(error.message); setBusy(false); return; }
-    toast('Payment link created'); refreshCounts(); onClose(); nav(`${base}/invoices/${data}`);
+    const r = await emailInvoice(data, 'invoice');
+    toast(r.sent ? `Payment link created and emailed to ${r.to}` : r.reason === 'not_configured' ? 'Payment link created' : `Payment link created, but the email wasn’t sent: ${r.error}`);
+    refreshCounts(); onClose(); nav(`${base}/invoices/${data}`);
   }
   return (
     <Modal title="Quick payment link" sub="Creates a one-instalment invoice with its own payment link." onClose={onClose}

@@ -75,7 +75,7 @@ export function Terms() {
         <li>Tell us promptly if you suspect unauthorised access.</li>
       </ul>
       <h2>Subscriptions and payment</h2>
-      <p>Paid plans are billed monthly or annually in advance, in Indian rupees, plus GST. Prices are listed on our <Link to="/pricing">pricing page</Link>. Plans renew automatically unless cancelled before the renewal date. Refunds are covered by our <Link to="/refunds">Refund &amp; Cancellation Policy</Link>.</p>
+      <p>Paid plans are billed monthly or annually in advance, in Indian rupees, plus GST. Plans are described on our <Link to="/pricing">pricing page</Link>; the price for your account is set out in your quote or order. Plans renew automatically unless cancelled before the renewal date. Refunds are covered by our <Link to="/refunds">Refund &amp; Cancellation Policy</Link>.</p>
       <h2>Payment gateways</h2>
       <p>TravoCloud Payments connects to payment gateway accounts that you own. Your agreement with each gateway (including its fees, settlement times, chargebacks and refunds to your customers) is between you and that gateway. TravoCloud does not hold, receive or transfer your funds and is not responsible for a gateway’s decisions, downtime or settlement delays. You are responsible for the accuracy of the invoices you send and for refunds to your own travellers.</p>
       <h2>Your data</h2>
@@ -115,7 +115,7 @@ export function Refunds() {
       <ul>
         <li>Annual plans cancelled within 7 days of the first payment receive a full refund.</li>
         <li>Otherwise, subscription fees already paid are not refunded for the remaining period, except where required by law or where we fail to provide the service as described.</li>
-        <li>Founding-offer and discounted plans follow the same rules.</li>
+        <li>Discounted plans follow the same rules.</li>
         <li>If you were charged in error, tell us within 30 days and we will refund the incorrect amount.</li>
       </ul>
       <h2>How refunds are paid</h2>

@@ -7,6 +7,7 @@ import AdminLayout from './pages/admin/AdminLayout';
 import AdminOrgs from './pages/admin/AdminOrgs';
 import AdminOrg from './pages/admin/AdminOrg';
 import AdminFx from './pages/admin/AdminFx';
+import AdminLeads from './pages/admin/AdminLeads';
 import OrgLayout from './components/OrgLayout';
 import Dashboard from './pages/app/Dashboard';
 import Invoices from './pages/app/Invoices';
@@ -68,6 +69,7 @@ export default function App() {
         <Route index element={<AdminOrgs />} />
         <Route path="orgs/:id" element={<AdminOrg />} />
         <Route path="fx" element={<AdminFx />} />
+        <Route path="leads" element={<AdminLeads />} />
       </Route>
       <Route path="/o/:slug" element={<RequireAuth><OrgLayout /></RequireAuth>}>
         <Route index element={<Dashboard />} />

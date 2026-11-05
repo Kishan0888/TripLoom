@@ -21,6 +21,7 @@ export default function AdminLayout() {
           <span className="lbl">Platform</span>
           <NavLink end to="/admin" className={cls} onClick={() => setOpen(false)}><Icon name="building" />Organisations</NavLink>
           <NavLink to="/admin/fx" className={cls} onClick={() => setOpen(false)}><Icon name="swap" />Reference FX rates</NavLink>
+          <NavLink to="/admin/leads" className={cls} onClick={() => setOpen(false)}><Icon name="inv" />Website leads</NavLink>
           {memberships.length > 0 && <><span className="lbl">My workspaces</span>
             {memberships.map((m) => <NavLink key={m.org_id} to={`/o/${m.slug}`}><Icon name="dash" />{m.name}</NavLink>)}</>}
         </nav>

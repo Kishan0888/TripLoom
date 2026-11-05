@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { useSession } from '../lib/session';
 import { SITE, waLink } from './site.config';
+import { DemoProvider } from './DemoForm';
 import './site.css';
 
 /* ---------- brand ---------- */
@@ -101,6 +102,7 @@ export default function SiteLayout() {
 
   return (
     <div className="mk">
+      <DemoProvider>
       <header className={`mk-head ${dark ? 'dark' : ''} ${scrolled ? 'scrolled' : ''}`}>
         <div className="wrap">
           <Logo />
@@ -134,6 +136,7 @@ export default function SiteLayout() {
               <li><Link to="/terms">Terms</Link></li><li><Link to="/refunds">Refund policy</Link></li></ul></div>
             <div><h4>Contact</h4><ul>
               {SITE.salesEmail && <li><a href={`mailto:${SITE.salesEmail}`}>{SITE.salesEmail}</a></li>}
+              {SITE.paymentsEmail && <li><a href={`mailto:${SITE.paymentsEmail}`}>{SITE.paymentsEmail}</a></li>}
               {SITE.phoneDisplay && <li>{SITE.phoneDisplay}{wa && <> · <a href={wa} target="_blank" rel="noreferrer">WhatsApp</a></>}</li>}
               {SITE.address && <li>{SITE.address}</li>}
               <li><Link to="/contact#form">Send us a message</Link></li>
@@ -146,6 +149,7 @@ export default function SiteLayout() {
         </div>
       </footer>
       {wa && <a className="mk-wa" href={wa} target="_blank" rel="noreferrer" aria-label="Chat with us on WhatsApp">{WA}</a>}
+      </DemoProvider>
     </div>
   );
 }

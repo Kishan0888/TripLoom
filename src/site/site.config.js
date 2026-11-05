@@ -3,11 +3,12 @@ export const SITE = {
   name: 'TravoCloud',
   tagline: 'The operating system for Indian tour operators.',
   legalName: '',          // e.g. 'TravoCloud Technologies Pvt Ltd' (shown in the footer and legal pages)
-  salesEmail: '',         // e.g. 'hello@your-domain'
-  supportEmail: '',       // e.g. 'support@your-domain'
+  salesEmail: 'sales@travocloud.com',
+  paymentsEmail: 'payments@travocloud.com',
+  supportEmail: '',       // optional separate support address
   whatsapp: '',           // digits with country code, e.g. '919800000000' (enables the WhatsApp button)
-  phoneDisplay: '',       // e.g. '+91 98000 00000'
-  address: '',            // office address
+  phoneDisplay: '+91 99581 80214',
+  address: '253, Third Floor, Shahpur Jat, New Delhi - 110049 (India)',
   linkedin: '',           // full URL
   instagram: '',          // full URL
   trialDays: 14,

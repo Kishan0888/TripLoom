@@ -7,12 +7,16 @@ import { Loading, ErrorBox, Icon, StatusPill, InstPill, When, Modal, Field, Pill
 import { OrgLogo } from '../../components/LogoUpload';
 import { money, fd, fds, payLink, istDate, istTime, today } from '../../lib/format';
 import { providerName } from '../../lib/gateways';
+import { emailInvoice } from '../../lib/email';
 import { PayTable } from './Payments';
 
-// Logs a reminder. Email delivery is wired up in the next phase (transactional email provider).
+// Emails a payment reminder from the organisation's own mailbox (Settings → Email). The mailer logs it in the invoice activity.
 export async function remind(orgId, invoiceId, name, toast) {
-  const { error } = await supabase.from('activity').insert({ org_id: orgId, invoice_id: invoiceId, text: 'Payment reminder sent to customer' });
-  toast(error ? error.message : `Reminder logged for ${name}`);
+  toast(`Sending reminder to ${name}…`);
+  const r = await emailInvoice(invoiceId, 'reminder');
+  toast(r.sent ? `Reminder emailed to ${r.to}`
+    : r.reason === 'not_configured' ? 'Reminders are emailed from your own mailbox. Set it up in Settings → Email.'
+    : `Reminder not sent: ${r.error}`);
 }
 
 export default function InvoiceDetail() {
@@ -49,7 +53,11 @@ export default function InvoiceDetail() {
     if (kind === 'send') {
       const { error: e } = await supabase.from('invoices').update({ status: 'sent', issue_date: new Date().toISOString().slice(0, 10) }).eq('id', i.id);
       if (!e) await supabase.from('activity').insert({ org_id: org.id, invoice_id: i.id, text: 'Invoice sent to customer' });
-      toast(e ? e.message : 'Invoice sent. Share the payment link with your customer.');
+      if (e) toast(e.message);
+      else {
+        const r = await emailInvoice(i.id, 'invoice');
+        toast(r.sent ? `Invoice sent and emailed to ${r.to}` : r.reason === 'not_configured' ? 'Invoice sent. Share the payment link with your customer.' : `Invoice sent, but the email wasn’t sent: ${r.error}`);
+      }
     } else if (kind === 'delete') {
       const { error: e } = await supabase.from('invoices').delete().eq('id', i.id);
       if (e) { toast(e.message); return; } toast('Draft deleted'); nav(`${base}/invoices`); return;

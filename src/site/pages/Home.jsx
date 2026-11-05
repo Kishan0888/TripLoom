@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { I, Spark, Threads, useMeta } from '../SiteLayout';
 import { HeroVisual, PaymentsVisual } from '../visuals';
 import { SITE, waLink } from '../site.config';
+import { useDemo } from '../DemoForm';
 
 const MODULES = [
   ['inbox', 'Enquiries & CRM', 'All channels in one inbox, lead scores and follow-up reminders', 'crm'],
@@ -133,11 +134,11 @@ export default function Home() {
 
       <section className="band tight" style={{ background: 'var(--paper-2)' }}>
         <div className="wrap" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 24, flexWrap: 'wrap' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <h2 style={{ fontSize: 'clamp(24px,3vw,32px)' }}>Plans from ₹2,499 a month.</h2>
-            <p style={{ color: 'var(--ink-soft)', fontSize: 17 }}>Founding offer: 40% off the annual Growth plan for the first 100 operators.</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 640 }}>
+            <h2 style={{ fontSize: 'clamp(24px,3vw,32px)' }}>See TravoCloud with your own rates.</h2>
+            <p style={{ color: 'var(--ink-soft)', fontSize: 17 }}>A 30-minute walkthrough using your enquiries, rates and invoices. We’ll recommend the right plan and send a quote for your team.</p>
           </div>
-          <Link className="b o" to="/pricing">See pricing</Link>
+          <div className="btns"><DemoButton /><Link className="b line" to="/pricing">Compare plans</Link></div>
         </div>
       </section>
 
@@ -162,3 +163,8 @@ export default function Home() {
 }
 
 export { Spark };
+
+function DemoButton() {
+  const openDemo = useDemo();
+  return <button type="button" className="b o" onClick={() => openDemo()}>Book a demo</button>;
+}

@@ -82,3 +82,16 @@ Owners upload a logo in Settings → Company (platform admins can do it from the
 ## Failed payment attempts
 
 Declined, failed and cancelled attempts are logged per invoice in `payment_failures` (readable by the organisation's team) and shown under **Failed payment attempts** on the invoice page, with a line in its activity timeline. Sources: CCAvenue, PayU and Cashfree responses; PayPal and Stripe returns and cancels; Razorpay Checkout failures (confirmed with the Razorpay API) and the `payment.failed` webhook; custom-gateway webhooks with a non-success status; gateway errors that stop a payment from starting; and declined demo payments. The custom webhook accepts `X-TravoCloud-Signature` (the older `X-TripLoom-Signature` header still works).
+
+## Emails from the organisation's own mailbox
+
+Owners connect their company mailbox in **Settings → Email** (SMTP). The `mailer` edge function (`supabase/functions/mailer`) then emails:
+- the invoice with its payment link and PDF link, on **Create & send**, **Send invoice** (drafts) and **Quick payment link**;
+- a payment reminder for the next unpaid instalment, on **Send reminder** (invoice page and dashboard).
+
+Every attempt is written to `email_log` and to the invoice's activity. SMTP passwords live in `smtp_configs`, which has no browser access.
+Supabase blocks outgoing ports 25 and 587, so mailboxes connect on **465 (SSL)** or **2525**. Gmail/Google Workspace (app password), Zoho, Hostinger, GoDaddy and Brevo work; Microsoft 365 (587 only) does not.
+
+## Website demo requests
+
+The website's demo form and the pricing-page popup save to `demo_requests` and call `mailer` (`notify_lead`) to email the request to **sales@travocloud.com** through TravoCloud's own mailbox. Set that mailbox up in the admin console under **Website leads**, where every request is also listed.

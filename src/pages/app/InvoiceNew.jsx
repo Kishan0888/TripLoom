@@ -6,6 +6,7 @@ import { useOrg } from '../../components/OrgLayout';
 import { Loading, Field, Thread, useToast } from '../../components/ui';
 import { money, inr0, today, addDays, fd, r2, CURRENCIES } from '../../lib/format';
 import { CustomerModal } from './Customers';
+import { emailInvoice } from '../../lib/email';
 
 const PRESETS = { '100': ['Full payment'], '30,70': ['Deposit', 'Balance'], '50,50': ['Deposit', 'Balance'], '20,40,40': ['Booking deposit', 'Second instalment', 'Final balance'] };
 
@@ -80,9 +81,14 @@ export default function InvoiceNew() {
     const { data: id, error } = await supabase.rpc('create_invoice', { p: { ...d, org_id: org.id, trip: d.trip.trim() || 'Untitled trip', send,
       lines: lines.length ? lines : [{ description: 'To be confirmed', qty: 1, rate: 0 }],
       instalments: d.instalments.map((s) => ({ label: s.label || 'Instalment', pct: Number(s.pct), due_date: s.due_date || addDays(t, 30) })) } });
+    if (error) { setBusy(false); setErrs([error.message]); window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+    if (send) {
+      const r = await emailInvoice(id, 'invoice');
+      toast(r.sent ? `Invoice created and emailed to ${r.to}`
+        : r.reason === 'not_configured' ? `Invoice created. Share the payment link with ${cust?.name}, or set up Settings → Email to send invoices automatically.`
+        : `Invoice created, but the email wasn’t sent: ${r.error}`);
+    } else toast('Draft saved');
     setBusy(false);
-    if (error) { setErrs([error.message]); window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
-    toast(send ? `Invoice created. Share the payment link with ${cust?.name}.` : 'Draft saved');
     refreshCounts(); nav(`${base}/invoices/${id}`);
   }
 
