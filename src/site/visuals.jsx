@@ -9,7 +9,7 @@ export function HeroVisual() {
       <div className="mock">
         <Bar title="TravoCloud · Home" />
         <div className="mock-body">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}><b style={{ fontFamily: 'var(--f-display)', fontSize: 15 }}>Good morning, Rahul</b><span className="mpill t">12 departures this week</span></div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}><b style={{ fontFamily: 'var(--f-display)', fontSize: 15 }}>Good morning, Martin</b><span className="mpill t">12 departures this week</span></div>
           <div className="mkpi"><div><small>New enquiries</small><b>38</b></div><div><small>Quotes sent</small><b>21</b></div><div><small>Collected</small><b>₹26.4L</b></div></div>
           <div className="mbars">{[42, 58, 36, 70, 54, 82, 64, 90].map((h, k) => <span key={k} className={k === 7 ? 'o' : ''} style={{ height: `${h}%` }} />)}</div>
           <div className="mrow"><span className="mpill o">WhatsApp</span><b>Emma Lawson</b><span className="muted">Golden Triangle · 2 pax · Dec</span><span className="r"><Spark /></span></div>
