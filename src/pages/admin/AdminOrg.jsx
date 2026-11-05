@@ -39,7 +39,7 @@ export default function AdminOrg() {
       <div className="pagehead">
         <div><Link className="crumb" to="/admin">← Organisations</Link>
           <div className="dhead"><h1>{org.name}</h1><Pill kind={org.status === 'active' ? 'ok' : 'late'}>{org.status === 'active' ? 'Active' : 'Suspended'}</Pill></div>
-          <p className="sub mono">payments.triploom.in/o/{org.slug}</p></div>
+          <p className="sub mono">{window.location.host}/o/{org.slug}</p></div>
         <div className="actions">
           {mine && <Link className="btn" to={`/o/${org.slug}`}>Open workspace</Link>}
           {org.status === 'active'

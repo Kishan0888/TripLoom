@@ -15,7 +15,7 @@ export default function AdminLayout() {
   return (
     <div className="app">
       <aside className="side" style={open ? { transform: 'none', boxShadow: 'var(--shadow)' } : undefined}>
-        <div className="brandmark"><LogoMark /><div><b>TripLoom</b><small>Platform admin</small></div></div>
+        <div className="brandmark"><LogoMark /><div><b>TravoCloud</b><small>Platform admin</small></div></div>
         <div className="opbox"><b>Admin console</b><span>Onboard and manage operators</span></div>
         <nav className="nav">
           <span className="lbl">Platform</span>

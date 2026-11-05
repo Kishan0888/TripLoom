@@ -25,10 +25,11 @@ export function Icon({ name, size }) {
 
 export function LogoMark({ size = 34 }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 34 34" aria-hidden="true">
-      <rect width="34" height="34" rx="9" fill="var(--brand)" />
-      <path d="M11 8v18M17 8v18M23 8v18" stroke="var(--thread)" strokeWidth="2.4" strokeLinecap="round" />
-      <path d="M8 12h4M15 12h4M21 12h5M8 17h1M13 17h8M25 17h1M8 22h4M15 22h4M21 22h5" stroke="var(--on-brand)" strokeWidth="2.4" strokeLinecap="round" />
+    <svg width={size} height={size} viewBox="0 0 40 40" aria-hidden="true">
+      <rect width="40" height="40" rx="11" fill="var(--brand)" />
+      <g fill="var(--on-brand)"><circle cx="14.5" cy="22" r="5" /><circle cx="21" cy="17.5" r="7" /><circle cx="27.5" cy="22" r="5" /><rect x="14.5" y="20" width="13" height="7" /></g>
+      <path d="M6.5 32.5c7-4.5 16-5 27-12.5" fill="none" stroke="var(--thread)" strokeWidth="2.6" strokeLinecap="round" />
+      <circle cx="33.5" cy="20" r="2.4" fill="var(--thread)" />
     </svg>
   );
 }

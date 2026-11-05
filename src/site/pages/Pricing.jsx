@@ -20,7 +20,7 @@ const ROWS = [
 ];
 
 export default function Pricing() {
-  useMeta('Pricing — Plans from ₹2,499/month | TripLooom', 'Simple monthly and annual plans for tour operators. Founding offer: 40% off annual Growth for the first 100 operators.');
+  useMeta('Pricing — Plans from ₹2,499/month | TravoCloud', 'Simple monthly and annual plans for tour operators. Founding offer: 40% off annual Growth for the first 100 operators.');
   const [annual, setAnnual] = useState(true);
   return (
     <>
@@ -70,8 +70,8 @@ export default function Pricing() {
             <div className="card"><h3>Messaging costs</h3><p>WhatsApp and email sending costs are billed by Meta and your email tool at their rates.</p></div>
           </div>
           <div className="card" style={{ marginTop: 20, flexDirection: 'row', alignItems: 'center', gap: 18, flexWrap: 'wrap', background: 'var(--ink)', color: 'var(--on-ink)', borderColor: 'var(--ink)' }}>
-            <div style={{ flex: 1, minWidth: 240 }}><h3>Only need payments?</h3><p style={{ color: 'var(--on-ink-2)' }}>TripLooom Payments is available on its own for operators who just want invoices, payment links and reconciliation.</p></div>
-            <Link className="b o" to="/payments">See TripLooom Payments</Link>
+            <div style={{ flex: 1, minWidth: 240 }}><h3>Only need payments?</h3><p style={{ color: 'var(--on-ink-2)' }}>TravoCloud Payments is available on its own for operators who just want invoices, payment links and reconciliation.</p></div>
+            <Link className="b o" to="/payments">See TravoCloud Payments</Link>
           </div>
         </div>
       </section>

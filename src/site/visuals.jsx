@@ -7,7 +7,7 @@ export function HeroVisual() {
   return (
     <div className="laptop" style={{ paddingBottom: 30 }}>
       <div className="mock">
-        <Bar title="app.triploom.in / home" />
+        <Bar title="TravoCloud · Home" />
         <div className="mock-body">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}><b style={{ fontFamily: 'var(--f-display)', fontSize: 15 }}>Good morning, Rahul</b><span className="mpill t">12 departures this week</span></div>
           <div className="mkpi"><div><small>New enquiries</small><b>38</b></div><div><small>Quotes sent</small><b>21</b></div><div><small>Collected</small><b>₹26.4L</b></div></div>
@@ -90,7 +90,7 @@ export function PaymentsVisual() {
   return (
     <div className="laptop" style={{ paddingBottom: 34 }}>
       <div className="mock">
-        <Bar title="payments.triploom.in / invoices / HT-26-27-0139" />
+        <Bar title="TravoCloud Payments · Invoice HT/26-27/0139" />
         <div className="mock-body">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div><b style={{ fontFamily: 'var(--f-display)', fontSize: 15 }}>Wanderlust Collective</b><div className="muted" style={{ fontSize: 11.5 }}>Golden Triangle group · 12 pax</div></div><span className="mpill t">Partially paid</span>
@@ -98,7 +98,7 @@ export function PaymentsVisual() {
           <div className="mkpi"><div><small>Total</small><b>$17,160</b></div><div><small>Collected</small><b style={{ color: '#1f7d72' }}>$3,432</b></div><div><small>Balance</small><b>$13,728</b></div></div>
           {[['p', 'Booking deposit · 20%', '20 Oct', '$3,432', 'Paid'], ['n', 'Second instalment · 40%', '15 Nov', '$6,864', 'Next'], ['', 'Final balance · 40%', '10 Dec', '$6,864', 'Upcoming']].map(([k, a, d, v, s]) => (
             <div className="mk-krow" key={a}><span className={`mk-knot ${k}`} /><div style={{ flex: 1 }}><b>{a}</b><div className="muted" style={{ fontSize: 11 }}>Due {d}</div></div><b style={{ fontVariantNumeric: 'tabular-nums' }}>{v}</b><span className={`mpill ${k === 'p' ? 't' : k === 'n' ? 'o' : ''}`}>{s}</span></div>))}
-          <div className="mrow"><I n="link" size={14} /><span className="muted" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>payments.triploom.in/p/4f9a2c…</span><span className="r mpill ink">Copy link</span></div>
+          <div className="mrow"><I n="link" size={14} /><span className="muted" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>Payment link · /p/4f9a2c…</span><span className="r mpill ink">Copy link</span></div>
         </div>
       </div>
       <div className="phone">

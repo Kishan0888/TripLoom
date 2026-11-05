@@ -162,7 +162,7 @@ function GatewayModal({ provider, existing, onClose, onSaved }) {
           </Field>
         ))}
         {provider === 'custom' && (
-          <Field label="Webhook signing secret" id="gw-whsec" span hint={'Your provider sends POST JSON {"reference","status":"success","amount","transaction_id","method"} with header X-TripLoom-Signature = HMAC-SHA256 of the body using this secret.'}>
+          <Field label="Webhook signing secret" id="gw-whsec" span hint={'Your provider sends POST JSON {"reference","status":"success","amount","transaction_id","method"} with header X-TravoCloud-Signature = HMAC-SHA256 of the body using this secret.'}>
             {existing ? (secret ? <div className="copyrow"><input className="in mono" id="gw-whsec" readOnly value={secret} /><button type="button" className="btn" onClick={() => copyText(secret, toast)}>Copy</button></div>
               : <button type="button" className="btn sm" onClick={showSecret}>Show secret</button>) : <span className="muted" style={{ fontSize: 13 }}>Generated when you connect.</span>}
           </Field>

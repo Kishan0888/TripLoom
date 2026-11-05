@@ -120,7 +120,7 @@ export default function InvoiceDocument({ org, inv, customer, lines, instalments
 
       {org.terms && <section className="a4-block a4-terms"><div className="a4-label">Terms</div><p>{org.terms}</p></section>}
 
-      <footer className="a4-foot">This is a computer-generated invoice and does not need a signature. · Powered by TripLoom Payments</footer>
+      <footer className="a4-foot">This is a computer-generated invoice and does not need a signature. · Powered by TravoCloud Payments</footer>
     </article>
   );
 }
@@ -137,7 +137,7 @@ export function PrintFrame({ title, onBack, autoPrint, children }) {
     const t = setTimeout(go, 3000);
     return () => clearTimeout(t);
   }, [title, autoPrint]);
-  useEffect(() => () => { document.title = 'TripLoom Payments'; }, []);
+  useEffect(() => () => { document.title = 'TravoCloud Payments'; }, []);
   return (
     <div className="print-page">
       <div className="print-bar">

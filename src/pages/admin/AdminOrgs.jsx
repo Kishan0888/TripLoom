@@ -20,7 +20,7 @@ export default function AdminOrgs() {
   return (
     <>
       <div className="pagehead">
-        <div><span className="admin-badge">Platform admin</span><h1 style={{ marginTop: 6 }}>Organisations</h1><p className="sub">Every tour operator on TripLoom Payments gets its own private workspace.</p></div>
+        <div><span className="admin-badge">Platform admin</span><h1 style={{ marginTop: 6 }}>Organisations</h1><p className="sub">Every tour operator on TravoCloud Payments gets its own private workspace.</p></div>
         <div className="actions"><button className="btn primary" onClick={() => setShow(true)}><Icon name="plus" />Onboard organisation</button></div>
       </div>
       <div className="kpis" style={{ gridTemplateColumns: 'repeat(3,minmax(0,1fr))' }}>
@@ -90,7 +90,7 @@ function OnboardModal({ onClose, onDone }) {
       footer={<><button className="btn ghost" onClick={onClose}>Cancel</button><button className="btn primary" onClick={save} disabled={busy}>{busy ? 'Creating…' : 'Create workspace'}</button></>}>
       <div className="fgrid">
         <Field label="Company name" id="o-name" span><input className="in" id="o-name" value={f.name} onChange={set('name')} placeholder="e.g. Banyan Tours Pvt Ltd" /></Field>
-        <Field label="Workspace address" id="o-slug" hint={`Short name for their link, e.g. banyan-tours → payments.triploom.in/o/${f.slug || 'banyan-tours'}`}><input className="in mono" id="o-slug" value={f.slug} onChange={set('slug')} /></Field>
+        <Field label="Workspace address" id="o-slug" hint={`Short name for their link, e.g. banyan-tours → ${window.location.host}/o/${f.slug || 'banyan-tours'}`}><input className="in mono" id="o-slug" value={f.slug} onChange={set('slug')} /></Field>
         <Field label="Invoice prefix" id="o-pre" hint="Invoices are numbered PREFIX/26-27/0001"><input className="in mono" id="o-pre" value={f.invoice_prefix} onChange={set('invoice_prefix')} placeholder="BT" maxLength={6} /></Field>
         <Field label="Billing email" id="o-email"><input className="in" id="o-email" value={f.email} onChange={set('email')} /></Field>
         <Field label="Phone" id="o-phone"><input className="in" id="o-phone" value={f.phone} onChange={set('phone')} /></Field>
@@ -111,7 +111,7 @@ export function CreatedModal({ r, onClose, title = 'Workspace ready' }) {
   const toast = useToast();
   const who = r.owner || r.member;
   const url = r.org ? `${window.location.origin}/o/${r.org.slug}` : `${window.location.origin}/login`;
-  const text = `Your TripLoom Payments login\nSign in: ${window.location.origin}/login\nEmail: ${who.email}${who.temp_password ? `\nTemporary password: ${who.temp_password}` : ''}`;
+  const text = `Your TravoCloud Payments login\nSign in: ${window.location.origin}/login\nEmail: ${who.email}${who.temp_password ? `\nTemporary password: ${who.temp_password}` : ''}`;
   return (
     <Modal title={title} onClose={onClose} footer={<><button className="btn" onClick={() => copyText(text, toast)}>Copy login details</button><button className="btn primary" onClick={onClose}>Done</button></>}>
       {r.org && <p className="sub">{r.org.name} is live at <span className="mono">{url.replace(/^https?:\/\//, '')}</span>. You can add their logo from the organisation page.</p>}
@@ -121,7 +121,7 @@ export function CreatedModal({ r, onClose, title = 'Workspace ready' }) {
           <div className="secret">Email: {who.email}<br />Temporary password: {who.temp_password}</div>
           <div className="alert warn">This password is shown only once.</div>
         </>
-      ) : <p>{who.email} already has a TripLoom login, so they can sign in with their existing password.</p>}
+      ) : <p>{who.email} already has a TravoCloud login, so they can sign in with their existing password.</p>}
     </Modal>
   );
 }

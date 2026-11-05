@@ -5,19 +5,19 @@ import { SITE, waLink } from './site.config';
 import './site.css';
 
 /* ---------- brand ---------- */
-// Two woven strands (orange and teal) crossing three times, echoing the three o's.
+// A cloud with a travel route passing through it.
 export function Mark({ size = 34 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 40 40" aria-hidden="true">
       <rect width="40" height="40" rx="11" fill="#0F2A33" />
-      <path d="M6 14c5 0 7 12 14 12s9-12 14-12" fill="none" stroke="#F2994A" strokeWidth="3.6" strokeLinecap="round" />
-      <path d="M6 26c5 0 7-12 14-12s9 12 14 12" fill="none" stroke="#2A9D8F" strokeWidth="3.6" strokeLinecap="round" />
-      <circle cx="20" cy="20" r="2.2" fill="#F6F3EC" />
+      <g fill="#F6F3EC"><circle cx="14.5" cy="22" r="5" /><circle cx="21" cy="17.5" r="7" /><circle cx="27.5" cy="22" r="5" /><rect x="14.5" y="20" width="13" height="7" /></g>
+      <path d="M6.5 32.5c7-4.5 16-5 27-12.5" fill="none" stroke="#F2994A" strokeWidth="2.6" strokeLinecap="round" />
+      <circle cx="33.5" cy="20" r="2.4" fill="#2A9D8F" />
     </svg>
   );
 }
 export function Logo({ to = '/' }) {
-  return <Link to={to} className="mk-logo" aria-label="TripLooom home"><Mark /><span>TripL<span className="ooo">ooo</span>m</span></Link>;
+  return <Link to={to} className="mk-logo" aria-label="TravoCloud home"><Mark /><span>Travo<span className="ooo">Cloud</span></span></Link>;
 }
 
 // Faint woven threads used behind dark bands.
@@ -70,7 +70,7 @@ export function useMeta(title, description) {
     let m = document.querySelector('meta[name="description"]');
     if (!m) { m = document.createElement('meta'); m.name = 'description'; document.head.appendChild(m); }
     m.content = description;
-    return () => { document.title = 'TripLooom'; };
+    return () => { document.title = 'TravoCloud'; };
   }, [title, description]);
 }
 
@@ -127,7 +127,7 @@ export default function SiteLayout() {
               <Link to="/login" style={{ fontWeight: 600, color: 'var(--orange)' }}>Log in →</Link>
             </div>
             <div><h4>Product</h4><ul>
-              <li><Link to="/product">Features</Link></li><li><Link to="/payments">TripLooom Payments</Link></li><li><Link to="/pricing">Pricing</Link></li>
+              <li><Link to="/product">Features</Link></li><li><Link to="/payments">TravoCloud Payments</Link></li><li><Link to="/pricing">Pricing</Link></li>
               <li><Link to="/contact">Book a demo</Link></li><li><Link to="/contact?intent=trial">Start free trial</Link></li></ul></div>
             <div><h4>Company</h4><ul>
               <li><Link to="/contact">About</Link></li><li><Link to="/contact#form">Contact</Link></li><li><Link to="/privacy">Privacy</Link></li>
@@ -142,7 +142,7 @@ export default function SiteLayout() {
                 {SITE.instagram && <a href={SITE.instagram} target="_blank" rel="noreferrer">Instagram</a>}</li>}
             </ul></div>
           </div>
-          <div className="bottom"><span>© {new Date().getFullYear() < 2027 ? 2027 : new Date().getFullYear()} {SITE.legalName || 'TripLooom'}. Made in India.</span><span>Data stored in India (Mumbai region)</span></div>
+          <div className="bottom"><span>© {new Date().getFullYear() < 2027 ? 2027 : new Date().getFullYear()} {SITE.legalName || 'TravoCloud'}. Made in India.</span><span>Data stored in India (Mumbai region)</span></div>
         </div>
       </footer>
       {wa && <a className="mk-wa" href={wa} target="_blank" rel="noreferrer" aria-label="Chat with us on WhatsApp">{WA}</a>}

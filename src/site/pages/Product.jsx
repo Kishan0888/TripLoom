@@ -6,7 +6,7 @@ import { ClosingBand } from './Home';
 const MODS = [
   ['crm', 'Enquiries & CRM', 'Never miss a lead again', 'Every enquiry, from every channel, lands in one inbox and becomes a file your whole team can see.',
     ['WhatsApp, email, website and Instagram in one inbox', 'AI pulls out dates, travellers and budget', 'Lead score and next best action', 'List or drag-and-drop board'], [1]],
-  ['quote', 'Quote studio', 'Quotes in minutes, priced to the rupee', 'Build day by day from your own contracted rates. TripLooom does the arithmetic and checks the plan before it goes out.',
+  ['quote', 'Quote studio', 'Quotes in minutes, priced to the rupee', 'Build day by day from your own contracted rates. TravoCloud does the arithmetic and checks the plan before it goes out.',
     ['Day-by-day builder from your own rates', 'Multiple versions side by side', 'Prices in the client’s currency with an exchange buffer', 'AI checks closures, guide clashes, vehicle size and margin'], [3]],
   ['rates', 'Rates & masters', 'Your contracts, finally in one place', 'Every hotel, vehicle, guide and entry ticket with its seasons, supplements and policies.',
     ['Hotels: room types × seasons, meal plans, extra beds, weekend and gala supplements', 'Cancellation slabs and guarantee policies', 'Transport per km, transfers and local packages', 'Guides, monuments, activities and restaurants'], []],
@@ -16,21 +16,21 @@ const MODS = [
     ['One click creates every supplier request', 'Paste a supplier reply; status and confirmation number update', 'Vouchers and reminders run on your rules (for example, 90 days before)'], [1]],
   ['dispatch', 'Dispatch & guides', 'The day, organised', 'See who is where, every day, without phoning around.',
     ['Daily duty roster for drivers, guides and airport teams', 'Guide calendar that shows leave and double bookings', 'Duty slips on WhatsApp'], []],
-  ['finance', 'Finance', 'Know who owes what', 'Invoices, part payments and supplier payables, with profit per file. Powered by TripLooom Payments.',
+  ['finance', 'Finance', 'Know who owes what', 'Invoices, part payments and supplier payables, with profit per file. Powered by TravoCloud Payments.',
     ['Full and part invoices in INR, EUR, USD, GBP and more', 'Payments, ageing and reminders', 'Supplier payables and profit per file'], []],
   ['marketing', 'Marketing', 'Bring travellers back', 'Stay in touch with past and future travellers from the same place you sell to them.',
     ['Email newsletters via Brevo, Mailchimp or Zoho', 'WhatsApp broadcasts with approved templates', 'Schedule Facebook and Instagram posts', 'Automated follow-up journeys'], []],
 ];
 
 export default function Product() {
-  useMeta('Features — Quotes, Bookings, Finance & Marketing | TripLooom', 'See every module: quote studio, rate masters, bookings desk, dispatch, finance and marketing for tour operators.');
+  useMeta('Features — Quotes, Bookings, Finance & Marketing | TravoCloud', 'See every module: quote studio, rate masters, bookings desk, dispatch, finance and marketing for tour operators.');
   return (
     <>
       <section className="band" style={{ paddingBottom: 48 }}>
         <div className="wrap" style={{ display: 'flex', flexDirection: 'column', gap: 22, maxWidth: 900 }}>
           <span className="eyebrow">Product</span>
           <h1 style={{ fontSize: 'clamp(34px,5vw,58px)', lineHeight: 1.05, fontWeight: 700 }}>One workspace for the whole tour, from first enquiry to final invoice.</h1>
-          <p className="lead" style={{ color: 'var(--ink-soft)' }}>See how TripLooom handles each part of your day.</p>
+          <p className="lead" style={{ color: 'var(--ink-soft)' }}>See how TravoCloud handles each part of your day.</p>
           <div className="btns"><Link className="b o" to="/contact">Book a free demo</Link><Link className="b line" to="/login">Log in</Link></div>
         </div>
       </section>
@@ -44,7 +44,7 @@ export default function Product() {
                 <h3>{h}</h3>
                 <p className="lead" style={{ color: 'var(--ink-soft)', fontSize: 17 }}>{copy}</p>
                 <ul className="ticks">{bullets.map((b, k) => <li key={b}>{b}{ai.includes(k) && <>&nbsp;<Spark /></>}</li>)}</ul>
-                {id === 'finance' && <Link to="/payments" style={{ fontWeight: 600, color: 'var(--orange-d)' }}>See TripLooom Payments →</Link>}
+                {id === 'finance' && <Link to="/payments" style={{ fontWeight: 600, color: 'var(--orange-d)' }}>See TravoCloud Payments →</Link>}
               </div>
               <div className="mod-vis"><ModuleVisual kind={id} /></div>
             </div>

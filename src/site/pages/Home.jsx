@@ -37,7 +37,7 @@ export function WaButton({ label = 'Talk to us on WhatsApp', className = 'b ghos
 }
 
 export default function Home() {
-  useMeta('TripLooom — Software for Indian Tour Operators & DMCs', 'Enquiries, AI itineraries with live costing, supplier bookings, vouchers and invoices in one workspace. Book a free demo.');
+  useMeta('TravoCloud — Software for Indian Tour Operators & DMCs', 'Enquiries, AI itineraries with live costing, supplier bookings, vouchers and invoices in one workspace. Book a free demo.');
   return (
     <>
       <section className="mk-hero">
@@ -46,7 +46,7 @@ export default function Home() {
           <div className="copy">
             <span className="eyebrow">Built for Indian tour operators and DMCs</span>
             <h1>Run every enquiry, quote, booking and <em>payment</em> from one place.</h1>
-            <p className="lead">TripLooom brings your WhatsApp and email enquiries, AI-built itineraries with live costing, supplier bookings, vouchers and invoices into one workspace, so your team spends less time copying and more time selling.</p>
+            <p className="lead">TravoCloud brings your WhatsApp and email enquiries, AI-built itineraries with live costing, supplier bookings, vouchers and invoices into one workspace, so your team spends less time copying and more time selling.</p>
             <div className="btns"><Link className="b o" to="/contact">Book a free demo <I n="arrow" /></Link><Link className="b ghost-ink" to="/contact?intent=trial">Start {SITE.trialDays}-day free trial</Link></div>
             <div className="mk-trust"><span><I n="check" />No credit card needed</span><span><I n="check" />Set up in a day</span><span><I n="check" />Data stored in India</span></div>
           </div>
@@ -92,7 +92,7 @@ export default function Home() {
       <section className="band" style={{ background: 'var(--card)', borderTop: '1px solid var(--line)', borderBottom: '1px solid var(--line)' }}>
         <div className="wrap mk-spot">
           <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
-            <span className="eyebrow">Live now · TripLooom Payments</span>
+            <span className="eyebrow">Live now · TravoCloud Payments</span>
             <h2 style={{ fontSize: 'clamp(28px,3.6vw,42px)', lineHeight: 1.12 }}>Collect every instalment, in every currency.</h2>
             <p className="lead" style={{ color: 'var(--ink-soft)' }}>Raise an invoice, split it into deposit and balance, and send one payment link. Travellers pay through your own gateway, the money lands in your bank, and every payout is matched to its bank credit.</p>
             <ul className="ticks">
@@ -108,7 +108,7 @@ export default function Home() {
 
       <section className="mk-ai band">
         <div className="wrap" style={{ position: 'relative' }}>
-          <div className="sec-head"><span className="eyebrow">AI that saves real hours</span><h2>An assistant that knows travel.</h2><p>Look for the sparkle: it marks every AI feature inside TripLooom.</p></div>
+          <div className="sec-head"><span className="eyebrow">AI that saves real hours</span><h2>An assistant that knows travel.</h2><p>Look for the sparkle: it marks every AI feature inside TravoCloud.</p></div>
           <div className="grid4">
             {[['Reads enquiries for you', 'Paste a message; name, dates, travellers and budget are filled in.'],
               ['Checks every quote', 'Flags a Taj Mahal visit on a Friday, a guide already booked, a group too big for the vehicle, or a margin below your minimum.'],

@@ -3,9 +3,10 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import { supabase, must } from '../../lib/supabase';
 import { useLoad } from '../../lib/session';
 import { useOrg } from '../../components/OrgLayout';
-import { Loading, ErrorBox, Icon, StatusPill, InstPill, When, Modal, Field, useToast, copyText } from '../../components/ui';
+import { Loading, ErrorBox, Icon, StatusPill, InstPill, When, Modal, Field, Pill, useToast, copyText } from '../../components/ui';
 import { OrgLogo } from '../../components/LogoUpload';
-import { money, fd, fds, payLink, istDate, today } from '../../lib/format';
+import { money, fd, fds, payLink, istDate, istTime, today } from '../../lib/format';
+import { providerName } from '../../lib/gateways';
 import { PayTable } from './Payments';
 
 // Logs a reminder. Email delivery is wired up in the next phase (transactional email provider).
@@ -22,20 +23,21 @@ export default function InvoiceDetail() {
   const toast = useToast();
   const [confirm, setConfirm] = useState(null);
   const { data, loading, error, reload } = useLoad(async () => {
-    const [inv, inst, lines, pays, act, cust] = await Promise.all([
+    const [inv, inst, lines, pays, act, cust, fails] = await Promise.all([
       supabase.from('invoice_summary').select('*').eq('id', id).single(),
       supabase.from('instalment_status').select('*').eq('invoice_id', id).order('position'),
       supabase.from('invoice_lines').select('*').eq('invoice_id', id).order('position'),
       supabase.from('payment_details').select('*').eq('invoice_id', id).order('paid_at'),
       supabase.from('activity').select('*').eq('invoice_id', id).order('created_at', { ascending: false }),
       supabase.from('invoices').select('customers(*)').eq('id', id).single(),
+      supabase.from('payment_failures').select('id,created_at,provider,amount,currency,status,reason,method,gateway_ref').eq('invoice_id', id).order('created_at', { ascending: false }),
     ]);
-    return { inv: must(inv), inst: must(inst), lines: must(lines), pays: must(pays), act: must(act), cust: must(cust).customers };
+    return { inv: must(inv), inst: must(inst), lines: must(lines), pays: must(pays), act: must(act), cust: must(cust).customers, fails: fails.error ? [] : fails.data };
   }, [id]);
 
   if (loading && !data) return <Loading />;
   if (error) return <><Link className="crumb" to={`${base}/invoices`}>← Invoices</Link><ErrorBox error={{ message: 'This invoice could not be found.' }} /></>;
-  const { inv: i, inst, lines, pays, act, cust: c } = data;
+  const { inv: i, inst, lines, pays, act, cust: c, fails } = data;
   const pc = Number(i.total) ? Math.min(100, (i.paid / i.total) * 100) : 0;
   const link = payLink(i.public_token);
   const events = [...act.map((a) => ({ date: a.created_at, text: a.text }))];
@@ -105,6 +107,21 @@ export default function InvoiceDetail() {
           </section>
           <section className="card"><div className="card-h"><div><h2>Payments on this invoice</h2><p>INR settled after conversion and gateway fees</p></div></div>
             {pays.length ? <PayTable rows={pays} base={base} onInvoice /> : <div className="empty">No payments yet.</div>}</section>
+          {fails.length > 0 && (
+            <section className="card"><div className="card-h"><div><h2>Failed payment attempts ({fails.length})</h2><p>Attempts that were declined, failed or cancelled. No money was collected for these.</p></div></div>
+              <div className="tw"><table className="t"><thead><tr><th>Date</th><th>Gateway</th><th className="right">Amount</th><th>Reason</th><th>Status</th></tr></thead><tbody>
+                {fails.map((f) => (
+                  <tr key={f.id}>
+                    <td style={{ whiteSpace: 'nowrap' }}>{fds(istDate(f.created_at))}<span className="l2">{istTime(f.created_at)}</span></td>
+                    <td>{providerName(f.provider)}{(f.method || f.gateway_ref) && <span className="l2">{[f.method, f.gateway_ref].filter(Boolean).join(' · ')}</span>}</td>
+                    <td className="right num">{f.amount != null ? money(f.amount, f.currency || i.currency) : '—'}</td>
+                    <td style={{ minWidth: 200 }}>{f.reason || '—'}</td>
+                    <td><Pill kind={f.status === 'cancelled' ? 'awaiting' : 'fail'}>{f.status === 'cancelled' ? 'Cancelled' : 'Failed'}</Pill></td>
+                  </tr>
+                ))}
+              </tbody></table></div>
+            </section>
+          )}
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 18, minWidth: 0 }}>
           <section className="card">

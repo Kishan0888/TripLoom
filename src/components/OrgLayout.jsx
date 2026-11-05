@@ -76,7 +76,7 @@ export default function OrgLayout() {
     <OrgCtx.Provider value={{ org, role, base, reloadOrg: loadOrg, refreshCounts: loadCounts, can: (r) => r.includes(role) }}>
       <div className={`app ${open ? 'nav-open' : ''}`}>
         <aside className="side" style={open ? { transform: 'none', boxShadow: 'var(--shadow)' } : undefined}>
-          <div className="brandmark"><LogoMark /><div><b>TripLoom</b><small>Payments</small></div></div>
+          <div className="brandmark"><LogoMark /><div><b>TravoCloud</b><small>Payments</small></div></div>
           <button className="opbox orgswitch" onClick={() => nav('/app')} title="Switch workspace">
             {org.logo_url && <img src={org.logo_url} alt="" style={{ maxHeight: 34, maxWidth: '100%', objectFit: 'contain', display: 'block', marginBottom: 6 }} />}
             <b>{org.name}</b><span>{ROLE_LBL[role]} · switch workspace</span>

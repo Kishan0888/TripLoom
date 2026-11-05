@@ -1,4 +1,4 @@
-/* TripLooom marketing website. Everything is scoped under .mk so the software's styles are untouched.
+/* TravoCloud marketing website. Everything is scoped under .mk so the software's styles are untouched.
    Layout: full-bleed bands (ink hero, paper sections, teal AI band, ink closing band) with a 1180px content column. */
 .mk{
   --ink:#0F2A33; --ink-2:#1d3d48; --ink-soft:#47606a; --paper:#F6F3EC; --paper-2:#EEE9DD; --card:#FFFDF8;

@@ -1,4 +1,4 @@
-# TripLoom Payments
+# TravoCloud Payments
 
 Multi-organisation payment collection for tour operators: invoices with instalment schedules, CCAvenue payment links in multiple currencies, and bank-credit reconciliation. Hosted at **payments.triploom.in**.
 
@@ -6,7 +6,7 @@ Multi-organisation payment collection for tour operators: invoices with instalme
 
 | Who | Where | What they do |
 |---|---|---|
-| Platform admin (TripLoom) | `/admin` | Onboard organisations, add their users, suspend/reactivate, maintain reference FX rates |
+| Platform admin (TravoCloud) | `/admin` | Onboard organisations, add their users, suspend/reactivate, maintain reference FX rates |
 | Operator team | `/o/<workspace>` e.g. `/o/himalayan-trails` | Dashboard, invoices, customers, payments, reconciliation, catalogue, settings |
 | Traveller | `/p/<token>` | Public payment page: pay the next instalment or the full balance |
 
@@ -60,7 +60,7 @@ Owners connect one or more gateways in **Settings → Payment gateway**. Each in
 | Cashfree | App ID, Secret key | Order status fetched from Cashfree (`PAID`) |
 | PayPal | Client ID, Client secret | Order captured on return (`COMPLETED`) |
 | Stripe | Secret key | Checkout Session fetched (`payment_status = paid`) |
-| Custom | Payment page URL with placeholders | Signed webhook (`X-TripLoom-Signature`, HMAC-SHA256) or "Record payment" on the invoice |
+| Custom | Payment page URL with placeholders | Signed webhook (`X-TravoCloud-Signature`, HMAC-SHA256) or "Record payment" on the invoice |
 
 All gateway calls go through the `gateway` edge function (`supabase/functions/gateway/index.ts`). Secrets live in `gateway_accounts`, which has no browser access.
 
@@ -78,3 +78,7 @@ Owners upload a logo in Settings → Company (platform admins can do it from the
 - Settlement report import for automatic reconciliation
 - Webhooks for Stripe, PayPal, Cashfree and PayU (today they confirm on return; Razorpay and custom already have webhooks)
 - Editing a sent invoice, refunds, PDF invoices
+
+## Failed payment attempts
+
+Declined, failed and cancelled attempts are logged per invoice in `payment_failures` (readable by the organisation's team) and shown under **Failed payment attempts** on the invoice page, with a line in its activity timeline. Sources: CCAvenue, PayU and Cashfree responses; PayPal and Stripe returns and cancels; Razorpay Checkout failures (confirmed with the Razorpay API) and the `payment.failed` webhook; custom-gateway webhooks with a non-success status; gateway errors that stop a payment from starting; and declined demo payments. The custom webhook accepts `X-TravoCloud-Signature` (the older `X-TripLoom-Signature` header still works).

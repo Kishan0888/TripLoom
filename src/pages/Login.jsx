@@ -30,7 +30,7 @@ export default function Login() {
   return (
     <div className="login">
       <section className="loom">
-        <div className="brandmark"><LogoMark size={38} /><div><b style={{ color: 'var(--loom-ink)' }}>TripLoom</b><small>Payments</small></div></div>
+        <div className="brandmark"><LogoMark size={38} /><div><b style={{ color: 'var(--loom-ink)' }}>TravoCloud</b><small>Payments</small></div></div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <h1>Collect every instalment, in every currency.</h1>
           <p>Invoice international travellers, split trips into deposits and balances, send payment links through Razorpay, CCAvenue, PayPal and more, and match every payout to your bank account.</p>
@@ -39,14 +39,14 @@ export default function Login() {
       </section>
       <section className="lform">
         <form onSubmit={submit} noValidate>
-          <span className="urlchip">payments.triploom.in/login</span>
+          <span className="urlchip">{window.location.host}/login</span>
           <div><h1 style={{ fontSize: 24 }}>Sign in</h1><p className="sub" style={{ marginTop: 4 }}>Use the account your administrator created for you.</p></div>
           <div className="field"><label htmlFor="l-email">Work email</label><input className="in" id="l-email" type="email" autoComplete="username" value={email} onChange={(e) => setEmail(e.target.value)} required /></div>
           <div className="field"><label htmlFor="l-pass">Password</label><input className="in" id="l-pass" type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} required /></div>
           {msg && <div className={`alert ${msg.kind}`}>{msg.text}</div>}
           <button className="btn primary paybtn" type="submit" disabled={busy}>{busy ? 'Signing in…' : 'Sign in'}</button>
           <button type="button" className="link" style={{ alignSelf: 'flex-start' }} onClick={forgot}>Forgot password?</button>
-          <p className="muted" style={{ fontSize: 12.5 }}>New operator? TripLoom sets up your workspace and sends you a login.</p>
+          <p className="muted" style={{ fontSize: 12.5 }}>New operator? TravoCloud sets up your workspace and sends you a login.</p>
         </form>
       </section>
     </div>

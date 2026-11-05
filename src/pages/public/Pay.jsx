@@ -65,7 +65,12 @@ export default function Pay() {
           },
           modal: { ondismiss: () => setBusy(false) },
         });
-        rzp.on('payment.failed', (r) => { setErr(r.error?.description || 'The payment failed. Please try again.'); setBusy(false); });
+        rzp.on('payment.failed', (r) => {
+          setErr(r.error?.description || 'The payment failed. Please try again.'); setBusy(false);
+          // Let the operator see this attempt on the invoice. The server confirms it with Razorpay before logging.
+          const pid = r.error?.metadata?.payment_id;
+          if (pid) fetch(`${GATEWAY_FN}/fail/razorpay`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ order: j.order, payment_id: pid }) }).catch(() => {});
+        });
         rzp.open(); return;
       }
       throw new Error('This payment option is not supported.');
@@ -171,7 +176,7 @@ function Shell({ org, children }) {
         )}
         {children}
       </div>
-      <div className="cofoot"><span>Secure payments</span><span>Powered by TripLoom Payments</span></div>
+      <div className="cofoot"><span>Secure payments</span><span>Powered by TravoCloud Payments</span></div>
     </div>
   );
 }

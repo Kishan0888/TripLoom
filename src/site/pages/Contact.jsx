@@ -8,7 +8,7 @@ const TYPES = ['Domestic', 'Inbound / DMC', 'Outbound', 'Mixed'];
 const SIZES = ['1–2', '3–10', '11–25', '26–50', '50+'];
 
 export default function Contact() {
-  useMeta('Book a Demo | TripLooom', 'Talk to our team and see TripLooom with your own rates. We reply on WhatsApp within one working hour.');
+  useMeta('Book a Demo | TravoCloud', 'Talk to our team and see TravoCloud with your own rates. We reply on WhatsApp within one working hour.');
   const [sp] = useSearchParams();
   const intent = ['trial', 'payments'].includes(sp.get('intent')) ? sp.get('intent') : 'demo';
   const [f, setF] = useState({ full_name: '', company: '', email: '', phone: '+91 ', city: '', business_type: '', team_size: '', current_software: '', preferred_time: '', consent: false, website: '' });
@@ -47,9 +47,9 @@ export default function Contact() {
       <section className="band">
         <div className="wrap" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,420px),1fr))', gap: 48, alignItems: 'start' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
-            <span className="eyebrow">About TripLooom</span>
+            <span className="eyebrow">About TravoCloud</span>
             <h1 style={{ fontSize: 'clamp(32px,4.4vw,52px)', lineHeight: 1.07, fontWeight: 700 }}>Built with tour operators, for tour operators.</h1>
-            <p className="lead" style={{ color: 'var(--ink-soft)' }}>We spoke to operators across India who were running million-rupee groups on WhatsApp threads and Excel sheets. TripLooom started from their lists of what goes wrong (missed enquiries, slow quotes, unconfirmed suppliers, unpaid balances) and fixes them in one workspace. We’re an Indian team, and we answer on WhatsApp.</p>
+            <p className="lead" style={{ color: 'var(--ink-soft)' }}>We spoke to operators across India who were running million-rupee groups on WhatsApp threads and Excel sheets. TravoCloud started from their lists of what goes wrong (missed enquiries, slow quotes, unconfirmed suppliers, unpaid balances) and fixes them in one workspace. We’re an Indian team, and we answer on WhatsApp.</p>
             <div className="grid3" style={{ gap: 12 }}>
               {[['user', 'Operator-first'], ['wallet', 'Honest pricing'], ['shield', 'Your data stays yours']].map(([ic, t]) => (
                 <div className="card" key={t} style={{ padding: 16, gap: 8 }}><span className="ico t" style={{ width: 38, height: 38 }}><I n={ic} /></span><b>{t}</b></div>))}
@@ -70,7 +70,7 @@ export default function Contact() {
               <div className="form"><div className="okbox"><h3 style={{ fontSize: 22, marginBottom: 8 }}>Thanks, {done}.</h3>We’ll WhatsApp you within one working hour to fix a time.</div><Link className="b line" to="/">Back to home</Link></div>
             ) : (
               <form className="form" onSubmit={submit} noValidate>
-                <div><h2 style={{ fontSize: 26 }}>{intent === 'trial' ? `Start your ${SITE.trialDays}-day free trial` : intent === 'payments' ? 'See TripLooom Payments' : 'Book a demo'}</h2>
+                <div><h2 style={{ fontSize: 26 }}>{intent === 'trial' ? `Start your ${SITE.trialDays}-day free trial` : intent === 'payments' ? 'See TravoCloud Payments' : 'Book a demo'}</h2>
                   <p style={{ color: 'var(--ink-soft)', marginTop: 6 }}>{intent === 'trial' ? 'Tell us about your team and we’ll set up your workspace.' : 'A 30-minute walkthrough with your own rates and workflow.'}</p></div>
                 <div className="fg">
                   <div className="f"><label htmlFor="d-name">Full name</label><input id="d-name" autoComplete="name" value={f.full_name} onChange={s('full_name')} /></div>
@@ -84,7 +84,7 @@ export default function Contact() {
                   <div className="f full"><label htmlFor="d-sw">Software you use today (optional)</label><input id="d-sw" value={f.current_software} onChange={s('current_software')} placeholder="e.g. Excel, Tally, another travel CRM" /></div>
                   <div style={{ position: 'absolute', left: '-9999px' }} aria-hidden="true"><label htmlFor="d-web">Website</label><input id="d-web" tabIndex={-1} autoComplete="off" value={f.website} onChange={s('website')} /></div>
                 </div>
-                <label className="check"><input type="checkbox" id="d-consent" checked={f.consent} onChange={s('consent')} />You can contact me on WhatsApp and email about TripLooom.</label>
+                <label className="check"><input type="checkbox" id="d-consent" checked={f.consent} onChange={s('consent')} />You can contact me on WhatsApp and email about TravoCloud.</label>
                 {err && <div className="err" role="alert">{err}</div>}
                 <button className="b o" type="submit" disabled={busy}>{busy ? 'Sending…' : intent === 'trial' ? 'Request my trial' : 'Book my demo'}</button>
                 <p className="muted" style={{ fontSize: 13 }}>By submitting you agree to our <Link to="/privacy">Privacy Policy</Link>.</p>

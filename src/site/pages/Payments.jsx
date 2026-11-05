@@ -9,14 +9,14 @@ const GATEWAYS = [
 ];
 
 export default function PaymentsPage() {
-  useMeta('TripLooom Payments — Invoices & payment links for tour operators', 'Invoice international travellers, split trips into deposits and balances, collect in 8 currencies through your own gateway and reconcile every payout.');
+  useMeta('TravoCloud Payments — Invoices & payment links for tour operators', 'Invoice international travellers, split trips into deposits and balances, collect in 8 currencies through your own gateway and reconcile every payout.');
   return (
     <>
       <section className="mk-hero">
         <Threads />
         <div className="wrap">
           <div className="copy">
-            <span className="eyebrow">TripLooom Payments</span>
+            <span className="eyebrow">TravoCloud Payments</span>
             <h1>Collect every instalment, in <em>every currency</em>.</h1>
             <p className="lead">Invoice international travellers, split each trip into a deposit and balances, and send one payment link. They pay through your own gateway, the money settles to your bank, and every payout is matched to its bank credit.</p>
             <div className="btns"><Link className="b o" to="/contact?intent=payments">Book a demo <I n="arrow" /></Link><Link className="b ghost-ink" to="/login">Log in</Link></div>
@@ -59,7 +59,7 @@ export default function PaymentsPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
             <span className="eyebrow">Bring your own gateway</span>
             <h2 style={{ fontSize: 'clamp(28px,3.6vw,40px)', lineHeight: 1.12 }}>Your merchant account. Your bank. Our software.</h2>
-            <p className="lead" style={{ color: 'var(--ink-soft)' }}>TripLooom Payments works on top of the gateway you already use. Travellers pay the gateway directly and funds settle to your account, so TripLooom never holds your money. Connect more than one, for example Razorpay for INR and PayPal for USD.</p>
+            <p className="lead" style={{ color: 'var(--ink-soft)' }}>TravoCloud Payments works on top of the gateway you already use. Travellers pay the gateway directly and funds settle to your account, so TravoCloud never holds your money. Connect more than one, for example Razorpay for INR and PayPal for USD.</p>
             <div className="grid2" style={{ gap: 10 }}>
               {GATEWAYS.map(([n, d]) => <div key={n} className="card" style={{ padding: 14, gap: 2, borderRadius: 14 }}><b style={{ fontSize: 15.5 }}>{n}</b><span className="muted" style={{ fontSize: 13.5 }}>{d}</span></div>)}
             </div>
@@ -72,7 +72,7 @@ export default function PaymentsPage() {
         <div className="wrap grid3">
           {[['shield', 'Private by design', 'Each company’s data is isolated at the database level. Gateway keys stay on the server and are never shown in the browser again.'],
             ['map', 'Stored in India', 'Your data is stored in the Mumbai region.'],
-            ['layers', 'Part of the TripLooom suite', 'Use Payments on its own today, or as the finance module of the full TripLooom workspace.']].map(([ic, t, d]) => (
+            ['layers', 'Part of the TravoCloud suite', 'Use Payments on its own today, or as the finance module of the full TravoCloud workspace.']].map(([ic, t, d]) => (
             <div key={t} style={{ display: 'flex', gap: 14 }}><span className="ico t"><I n={ic} /></span><div><h3 style={{ fontSize: 18, marginBottom: 4 }}>{t}</h3><p style={{ color: 'var(--ink-soft)', fontSize: 15.5 }}>{d}</p></div></div>))}
         </div>
       </section>
@@ -81,7 +81,7 @@ export default function PaymentsPage() {
         <div className="wrap" style={{ display: 'grid', gap: 36 }}>
           <div className="sec-head" style={{ marginBottom: 0 }}><span className="eyebrow">Questions</span><h2>Payments FAQ</h2></div>
           <FAQ items={[
-            ['Does TripLooom hold or touch the money?', 'No. Travellers pay through your own gateway account and the gateway settles directly to your bank. TripLooom shows you what was paid and when it should arrive.'],
+            ['Does TravoCloud hold or touch the money?', 'No. Travellers pay through your own gateway account and the gateway settles directly to your bank. TravoCloud shows you what was paid and when it should arrive.'],
             ['Which gateways can I use?', 'Razorpay, CCAvenue, PayU, Cashfree, PayPal and Stripe, or any other provider with a hosted payment page through the custom option. You can connect several and each invoice shows the ones that accept its currency.'],
             ['Can a traveller pay part now and the rest later?', 'Yes. Every invoice has an instalment plan. The payment link always offers the next instalment, and the traveller can choose to pay the full balance instead.'],
             ['What about bank transfers or cash?', 'Record them on the invoice in a few seconds. They count towards the balance like any other payment.'],
@@ -90,7 +90,7 @@ export default function PaymentsPage() {
         </div>
       </section>
 
-      <ClosingBand title="Get paid on time, in any currency." sub="See TripLooom Payments with your own invoices and gateway."><Link className="b o" to="/contact?intent=payments">Book a demo</Link><WaButton /></ClosingBand>
+      <ClosingBand title="Get paid on time, in any currency." sub="See TravoCloud Payments with your own invoices and gateway."><Link className="b o" to="/contact?intent=payments">Book a demo</Link><WaButton /></ClosingBand>
     </>
   );
 }
