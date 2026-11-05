@@ -27,7 +27,7 @@ function safeOrigin(o?: string | null) {
   if (!o) return DEFAULT_APP;
   try {
     const u = new URL(o); const h = u.hostname;
-    if ((u.protocol === "https:" && (h === "payments.triploom.in" || h.endsWith(".triploom.in") || /(^|\.)travocloud\.[a-z.]+$/.test(h) || h.endsWith(".vercel.app"))) || h === "localhost" || h === "127.0.0.1") return u.origin;
+    if ((u.protocol === "https:" && (h === "payments.triploom.in" || h.endsWith(".triploom.in") || /(^|\.)travocloud\.[a-z.]+$/.test(h) || h.endsWith(".vercel.app") || h === "limegreen-gazelle-419088.hostingersite.com")) || h === "localhost" || h === "127.0.0.1") return u.origin;
   } catch { /* fall through */ }
   return DEFAULT_APP;
 }

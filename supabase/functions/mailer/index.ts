@@ -20,7 +20,7 @@ const DEFAULT_APP = Deno.env.get("APP_URL") ?? "https://triploom-ochre.vercel.ap
 function safeOrigin(o?: string | null) {
   try {
     const u = new URL(String(o)); const h = u.hostname;
-    if ((u.protocol === "https:" && (h.endsWith(".vercel.app") || /(^|\.)travocloud\.[a-z.]+$/.test(h) || h.endsWith("triploom.in"))) || h === "localhost" || h === "127.0.0.1") return u.origin;
+    if ((u.protocol === "https:" && (h.endsWith(".vercel.app") || /(^|\.)travocloud\.[a-z.]+$/.test(h) || h.endsWith("triploom.in") || h === "limegreen-gazelle-419088.hostingersite.com")) || h === "localhost" || h === "127.0.0.1") return u.origin;
   } catch { /* fall through */ }
   return DEFAULT_APP;
 }
